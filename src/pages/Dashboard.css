@@ -1,0 +1,303 @@
+/* =====================================
+   Dashboard Page
+===================================== */
+
+.dashboard-page {
+  min-height: 100vh;
+
+  padding: 45px 50px 70px;
+
+  box-sizing: border-box;
+
+  background:
+    linear-gradient(
+      135deg,
+      #f5f8ff 0%,
+      #eef4ff 50%,
+      #f8faff 100%
+    );
+}
+
+
+/* =====================================
+   Dashboard Header
+===================================== */
+
+.dashboard-header {
+  text-align: center;
+
+  margin-bottom: 50px;
+}
+
+.dashboard-header h1 {
+  margin: 0;
+
+  color: #1769ff;
+
+  font-size: 42px;
+
+  font-weight: 700;
+
+  letter-spacing: -0.5px;
+}
+
+.dashboard-header p {
+  margin: 12px 0 0;
+
+  color: #667085;
+
+  font-size: 18px;
+}
+
+
+/* =====================================
+   Dashboard Cards
+===================================== */
+
+.dashboard-cards {
+  width: 100%;
+
+  max-width: 1350px;
+
+  margin: 0 auto;
+
+  display: grid;
+
+  grid-template-columns:
+    repeat(3, minmax(0, 1fr));
+
+  gap: 30px;
+}
+
+
+/* =====================================
+   Card
+===================================== */
+
+.dashboard-card {
+  min-height: 280px;
+
+  padding: 30px 25px;
+
+  box-sizing: border-box;
+
+  display: flex;
+
+  flex-direction: column;
+
+  align-items: center;
+
+  text-align: center;
+
+  background: #ffffff;
+
+  border: 1px solid #e4e7ec;
+
+  border-radius: 14px;
+
+  box-shadow:
+    0 4px 14px rgba(16, 24, 40, 0.07);
+
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.dashboard-card:hover {
+  transform: translateY(-6px);
+
+  box-shadow:
+    0 12px 28px rgba(16, 24, 40, 0.12);
+}
+
+
+/* =====================================
+   Icon
+===================================== */
+
+.dashboard-icon {
+  width: 65px;
+  height: 65px;
+
+  margin-bottom: 20px;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  border-radius: 14px;
+
+  background: #eaf2ff;
+
+  font-size: 30px;
+}
+
+
+/* =====================================
+   Card Heading
+===================================== */
+
+.dashboard-card h2 {
+  margin: 0 0 12px;
+
+  color: #1d2939;
+
+  font-size: 22px;
+
+  font-weight: 700;
+}
+
+
+/* =====================================
+   Card Description
+===================================== */
+
+.dashboard-card p {
+  max-width: 300px;
+
+  min-height: 48px;
+
+  margin: 0 0 22px;
+
+  color: #667085;
+
+  font-size: 15px;
+
+  line-height: 1.6;
+}
+
+
+/* =====================================
+   Employee Management Link
+===================================== */
+
+.dashboard-card a {
+  margin-top: auto;
+
+  min-width: 150px;
+
+  padding: 11px 20px;
+
+  box-sizing: border-box;
+
+  border-radius: 7px;
+
+  background: #1769ff;
+
+  color: #ffffff;
+
+  text-decoration: none;
+
+  font-size: 14px;
+
+  font-weight: 600;
+
+  transition: background 0.2s ease;
+}
+
+.dashboard-card a:hover {
+  background: #0d55d9;
+}
+
+
+/* =====================================
+   Under Progress Button
+===================================== */
+
+.dashboard-card button {
+  margin-top: auto;
+
+  min-width: 150px;
+
+  padding: 11px 20px;
+
+  border: 1px solid #d0d5dd;
+
+  border-radius: 7px;
+
+  background: #f9fafb;
+
+  color: #667085;
+
+  font-size: 14px;
+
+  font-weight: 600;
+
+  cursor: pointer;
+
+  transition: all 0.2s ease;
+}
+
+.dashboard-card button:hover {
+  background: #f2f4f7;
+
+  border-color: #bfc5ce;
+}
+
+
+/* =====================================
+   Employee Management Highlight
+===================================== */
+
+.employee-card {
+  border-top: 4px solid #1769ff;
+}
+
+.employee-card .dashboard-icon {
+  background: #e8f1ff;
+}
+
+
+/* =====================================
+   Tablet
+===================================== */
+
+@media (max-width: 1050px) {
+
+  .dashboard-page {
+    padding: 35px 30px 60px;
+  }
+
+  .dashboard-cards {
+    grid-template-columns:
+      repeat(2, minmax(0, 1fr));
+  }
+
+}
+
+
+/* =====================================
+   Mobile
+===================================== */
+
+@media (max-width: 700px) {
+
+  .dashboard-page {
+    padding: 30px 15px 50px;
+  }
+
+  .dashboard-header {
+    margin-bottom: 35px;
+  }
+
+  .dashboard-header h1 {
+    font-size: 32px;
+  }
+
+  .dashboard-header p {
+    font-size: 16px;
+  }
+
+  .dashboard-cards {
+    grid-template-columns: 1fr;
+
+    gap: 20px;
+  }
+
+  .dashboard-card {
+    min-height: 260px;
+  }
+
+}

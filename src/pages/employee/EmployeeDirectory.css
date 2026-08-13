@@ -1,0 +1,505 @@
+/* =========================================
+   Employee Directory Page
+========================================= */
+
+.employee-page {
+  width: 100%;
+  min-height: 100vh;
+
+  padding: 40px 50px 70px;
+
+  background: #f5f7fb;
+
+  box-sizing: border-box;
+}
+
+
+/* =========================================
+   Header
+========================================= */
+
+.employee-header {
+  text-align: center;
+
+  margin-bottom: 38px;
+}
+
+.employee-header h1 {
+  margin: 0;
+
+  color: #1769ff;
+
+  font-size: 40px;
+  font-weight: 700;
+
+  letter-spacing: -0.5px;
+}
+
+.employee-header p {
+  margin-top: 10px;
+
+  color: #667085;
+
+  font-size: 16px;
+}
+
+
+/* =========================================
+   Filter Panel
+========================================= */
+
+.employee-filter-panel {
+  width: 100%;
+  max-width: 1350px;
+
+  margin: 0 auto 28px;
+
+  padding: 28px 32px;
+
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+
+  gap: 22px;
+
+  background: #ffffff;
+
+  border: 1px solid #e4e7ec;
+
+  border-radius: 12px;
+
+  box-shadow:
+    0 4px 12px rgba(16, 24, 40, 0.06);
+
+  box-sizing: border-box;
+}
+
+
+/* =========================================
+   Filter Group
+========================================= */
+
+.filter-group {
+  display: flex;
+
+  flex-direction: column;
+
+  gap: 8px;
+}
+
+.filter-group label {
+  font-size: 14px;
+
+  font-weight: 600;
+
+  color: #344054;
+}
+
+
+/* =========================================
+   Inputs / Select
+========================================= */
+
+.filter-group input,
+.filter-group select {
+  height: 46px;
+
+  padding: 0 14px;
+
+  border: 1px solid #d0d5dd;
+
+  border-radius: 7px;
+
+  background: #ffffff;
+
+  color: #101828;
+
+  font-size: 15px;
+
+  outline: none;
+
+  box-sizing: border-box;
+}
+
+.filter-group input {
+  width: 330px;
+}
+
+.filter-group select {
+  width: 220px;
+}
+
+.filter-group input:focus,
+.filter-group select:focus {
+  border-color: #1769ff;
+
+  box-shadow:
+    0 0 0 3px rgba(23, 105, 255, 0.1);
+}
+
+
+/* =========================================
+   Buttons
+========================================= */
+
+.filter-buttons {
+  display: flex;
+
+  gap: 10px;
+}
+
+.search-button,
+.reset-button {
+  height: 46px;
+
+  padding: 0 20px;
+
+  border-radius: 7px;
+
+  font-size: 15px;
+
+  font-weight: 600;
+
+  cursor: pointer;
+
+  transition: all 0.2s ease;
+}
+
+.search-button {
+  border: 1px solid #1769ff;
+
+  background: #1769ff;
+
+  color: #ffffff;
+}
+
+.search-button:hover {
+  background: #0d55d9;
+}
+
+.reset-button {
+  border: 1px solid #d0d5dd;
+
+  background: #ffffff;
+
+  color: #344054;
+}
+
+.reset-button:hover {
+  background: #f2f4f7;
+}
+
+
+/* =========================================
+   Result Count
+========================================= */
+
+.employee-result {
+  width: 100%;
+  max-width: 1350px;
+
+  margin: 0 auto 20px;
+
+  color: #667085;
+
+  font-size: 14px;
+}
+
+.employee-result strong {
+  color: #1769ff;
+}
+
+
+/* =========================================
+   Employee Grid
+========================================= */
+
+.employee-grid {
+  width: 100%;
+  max-width: 1350px;
+
+  margin: 0 auto;
+
+  display: grid;
+
+  grid-template-columns:
+    repeat(3, minmax(0, 1fr));
+
+  gap: 28px;
+}
+
+
+/* =========================================
+   Employee Card
+========================================= */
+
+.employee-card {
+  min-height: 340px;
+
+  padding: 30px 25px;
+
+  display: flex;
+
+  flex-direction: column;
+
+  align-items: center;
+
+  text-align: center;
+
+  background: #ffffff;
+
+  border: 1px solid #e4e7ec;
+
+  border-radius: 12px;
+
+  box-shadow:
+    0 3px 12px rgba(16, 24, 40, 0.06);
+
+  box-sizing: border-box;
+
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.employee-card:hover {
+  transform: translateY(-5px);
+
+  box-shadow:
+    0 10px 24px rgba(16, 24, 40, 0.12);
+}
+
+
+/* =========================================
+   Employee Photo
+========================================= */
+
+.employee-photo-wrapper {
+  width: 120px;
+  height: 120px;
+
+  margin-bottom: 18px;
+
+  border-radius: 50%;
+
+  padding: 3px;
+
+  background: #1769ff;
+
+  box-sizing: border-box;
+}
+
+.employee-photo-wrapper img {
+  width: 100%;
+  height: 100%;
+
+  display: block;
+
+  object-fit: cover;
+
+  border-radius: 50%;
+
+  border: 3px solid #ffffff;
+
+  box-sizing: border-box;
+}
+
+
+/* =========================================
+   Employee Name
+========================================= */
+
+.employee-card h2 {
+  margin: 0 0 20px;
+
+  color: #1769ff;
+
+  font-size: 24px;
+
+  font-weight: 700;
+}
+
+
+/* =========================================
+   Employee Information
+========================================= */
+
+.employee-info {
+  width: 100%;
+
+  display: flex;
+
+  flex-direction: column;
+
+  gap: 10px;
+}
+
+.employee-info p {
+  margin: 0;
+
+  display: flex;
+
+  justify-content: space-between;
+
+  gap: 15px;
+
+  font-size: 14px;
+
+  text-align: left;
+}
+
+.employee-info span {
+  color: #667085;
+}
+
+.employee-info strong {
+  color: #344054;
+
+  font-weight: 600;
+
+  text-align: right;
+}
+
+
+/* =========================================
+   Status Badge
+========================================= */
+
+.status-badge {
+  margin-top: 20px;
+
+  padding: 6px 18px;
+
+  border-radius: 20px;
+
+  font-size: 13px;
+
+  font-weight: 700;
+}
+
+.status-badge.active {
+  background: #ecfdf3;
+
+  color: #027a48;
+}
+
+.status-badge.inactive {
+  background: #fef3f2;
+
+  color: #b42318;
+}
+
+
+/* =========================================
+   No Results
+========================================= */
+
+.no-results {
+  width: 100%;
+  max-width: 600px;
+
+  margin: 50px auto;
+
+  padding: 40px;
+
+  text-align: center;
+
+  background: #ffffff;
+
+  border: 1px solid #e4e7ec;
+
+  border-radius: 12px;
+}
+
+.no-results h3 {
+  margin: 0 0 8px;
+
+  color: #344054;
+
+  font-size: 20px;
+}
+
+.no-results p {
+  margin: 0;
+
+  color: #667085;
+}
+
+
+/* =========================================
+   Tablet
+========================================= */
+
+@media (max-width: 1100px) {
+
+  .employee-page {
+    padding: 35px 30px 60px;
+  }
+
+  .employee-filter-panel {
+    flex-wrap: wrap;
+
+    align-items: flex-end;
+  }
+
+  .employee-grid {
+    grid-template-columns:
+      repeat(2, minmax(0, 1fr));
+  }
+
+}
+
+
+/* =========================================
+   Mobile
+========================================= */
+
+@media (max-width: 700px) {
+
+  .employee-page {
+    padding: 25px 15px 50px;
+  }
+
+  .employee-header {
+    margin-bottom: 25px;
+  }
+
+  .employee-header h1 {
+    font-size: 32px;
+  }
+
+  .employee-filter-panel {
+    flex-direction: column;
+
+    align-items: stretch;
+
+    gap: 16px;
+
+    padding: 20px;
+  }
+
+  .filter-group input,
+  .filter-group select {
+    width: 100%;
+  }
+
+  .filter-buttons {
+    width: 100%;
+  }
+
+  .search-button,
+  .reset-button {
+    flex: 1;
+  }
+
+  .employee-grid {
+    grid-template-columns: 1fr;
+
+    gap: 20px;
+  }
+
+  .employee-card {
+    min-height: auto;
+  }
+
+}
