@@ -1,142 +1,189 @@
 import { useState } from "react";
-import "./EmployeeDirectory.css";
-
-import arunImage from "../../assets/Girl img.webp";
-import priyaImage from "../../assets/girl imeges.webp";
-import karthikImage from "../../assets/cartoon img.webp";
-import divyaImage from "../../assets/boy img.avif";
-import rahulImage from "../../assets/cute girl.avif";
-
-type Employee = {
-  id: number;
-  name: string;
-  department: string;
-  designation: string;
-  status: "Active" | "Inactive";
-  photo: string;
-};
-
-const employees: Employee[] = [
-  {
-    id: 101,
-    name: "Arun",
-    department: "Development",
-    designation: "Developer",
-    status: "Active",
-    photo: arunImage,
-  },
-  {
-    id: 102,
-    name: "Priya",
-    department: "HR",
-    designation: "HR Executive",
-    status: "Active",
-    photo: priyaImage,
-  },
-  {
-    id: 103,
-    name: "Karthik",
-    department: "CRM",
-    designation: "CRM Executive",
-    status: "Active",
-    photo: karthikImage,
-  },
-  {
-    id: 104,
-    name: "Divya",
-    department: "Finance",
-    designation: "Accountant",
-    status: "Inactive",
-    photo: divyaImage,
-  },
-  {
-    id: 105,
-    name: "Rahul",
-    department: "Development",
-    designation: "Frontend Developer",
-    status: "Active",
-    photo: rahulImage,
-  },
-];
+import { useEmployeeContext } from "../../context/EmployeeContext";
+import type { Employee } from "./employeeData";
 
 function EmployeeDirectory() {
-  const [search, setSearch] = useState("");
-  const [department, setDepartment] = useState("All");
-  const [status, setStatus] = useState("All");
+  const { employees } = useEmployeeContext();
 
-  const filteredEmployees = employees.filter((employee) => {
-    const nameMatch = employee.name
-      .toLowerCase()
-      .includes(search.toLowerCase());
+  const [searchText, setSearchText] = useState("");
+  const [departmentFilter, setDepartmentFilter] =
+    useState("All");
 
-    const departmentMatch =
-      department === "All" ||
-      employee.department === department;
+  const [selectedEmployee, setSelectedEmployee] =
+    useState<Employee | null>(null);
 
-    const statusMatch =
-      status === "All" ||
-      employee.status === status;
+  /* ================= FILTER ================= */
 
-    return (
-      nameMatch &&
-      departmentMatch &&
-      statusMatch
-    );
-  });
+  const filteredEmployees = employees.filter(
+    (employee) => {
+      const search = searchText.toLowerCase();
 
-  const resetFilters = () => {
-    setSearch("");
-    setDepartment("All");
-    setStatus("All");
-  };
+      const matchesSearch =
+        employee.name.toLowerCase().includes(search) ||
+        employee.department
+          .toLowerCase()
+          .includes(search) ||
+        employee.designation
+          .toLowerCase()
+          .includes(search);
+
+      const matchesDepartment =
+        departmentFilter === "All" ||
+        employee.department === departmentFilter;
+
+      return matchesSearch && matchesDepartment;
+    }
+  );
 
   return (
-    <div className="employee-page">
+    <div
+      style={{
+        minHeight: "calc(100vh - 76px)",
+        background: "#f4f7fb",
+        padding: "40px 30px 60px",
+        fontFamily: "Arial, Helvetica, sans-serif",
+      }}
+    >
+      {/* ================= HEADER ================= */}
 
-      {/* Page Heading */}
-      <div className="employee-header">
-        <h1>
+      <div
+        style={{
+          maxWidth: "1100px",
+          margin: "0 auto 30px",
+          textAlign: "center",
+        }}
+      >
+        <p
+          style={{
+            margin: "0 0 6px",
+            color: "#1769ff",
+            fontSize: "13px",
+            fontWeight: 700,
+          }}
+        >
+          EMPLOYEE MANAGEMENT
+        </p>
+
+        <h1
+          style={{
+            margin: "0 0 8px",
+            color: "#172033",
+            fontSize: "30px",
+          }}
+        >
           Employee Directory
         </h1>
 
-        <p>
-          Search and manage employee information
+        <p
+          style={{
+            margin: 0,
+            color: "#64748b",
+            fontSize: "14px",
+          }}
+        >
+          View employee profiles and organization details
         </p>
       </div>
 
+      {/* ================= SUMMARY ================= */}
 
-      {/* Search and Filter Section */}
-      <div className="employee-filter-panel">
+      <div
+        style={{
+          maxWidth: "1100px",
+          margin: "0 auto 20px",
+          background: "#ffffff",
+          padding: "18px 22px",
+          borderRadius: "12px",
+          border: "1px solid #e2e8f0",
+          display: "flex",
+          justifyContent: "space-between",
+          alignItems: "center",
+          boxShadow:
+            "0 4px 15px rgba(15, 23, 42, 0.05)",
+        }}
+      >
+        <div>
+          <strong
+            style={{
+              color: "#172033",
+              fontSize: "15px",
+            }}
+          >
+            Employee Directory
+          </strong>
 
-        <div className="filter-group">
-          <label>
-            Employee Name
+          <p
+            style={{
+              margin: "4px 0 0",
+              color: "#64748b",
+              fontSize: "12px",
+            }}
+          >
+            Showing {filteredEmployees.length} of{" "}
+            {employees.length} employees
+          </p>
+        </div>
+
+        <strong
+          style={{
+            color: "#1769ff",
+            fontSize: "25px",
+          }}
+        >
+          {String(employees.length).padStart(2, "0")}
+        </strong>
+      </div>
+
+      {/* ================= SEARCH + FILTER ================= */}
+
+      <div
+        style={{
+          maxWidth: "1100px",
+          margin: "0 auto 25px",
+          background: "#ffffff",
+          padding: "18px",
+          borderRadius: "12px",
+          border: "1px solid #e2e8f0",
+          display: "grid",
+          gridTemplateColumns:
+            "minmax(250px, 1fr) 220px",
+          gap: "15px",
+        }}
+      >
+        <div>
+          <label style={labelStyle}>
+            Search Employee
           </label>
 
           <input
             type="text"
-            value={search}
-            onChange={(e) =>
-              setSearch(e.target.value)
+            value={searchText}
+            onChange={(event) =>
+              setSearchText(event.target.value)
             }
-            placeholder="Search employee by name"
+            placeholder="Search name, department or designation..."
+            style={inputStyle}
           />
         </div>
 
-
-        <div className="filter-group">
-          <label>
+        <div>
+          <label style={labelStyle}>
             Department
           </label>
 
           <select
-            value={department}
-            onChange={(e) =>
-              setDepartment(e.target.value)
+            value={departmentFilter}
+            onChange={(event) =>
+              setDepartmentFilter(event.target.value)
             }
+            style={inputStyle}
           >
             <option value="All">
               All Departments
+            </option>
+
+            <option value="Development">
+              Development
             </option>
 
             <option value="HR">
@@ -151,166 +198,402 @@ function EmployeeDirectory() {
               Finance
             </option>
 
-            <option value="Development">
-              Development
+            <option value="Marketing">
+              Marketing
             </option>
           </select>
         </div>
-
-
-        <div className="filter-group">
-          <label>
-            Status
-          </label>
-
-          <select
-            value={status}
-            onChange={(e) =>
-              setStatus(e.target.value)
-            }
-          >
-            <option value="All">
-              All Status
-            </option>
-
-            <option value="Active">
-              Active
-            </option>
-
-            <option value="Inactive">
-              Inactive
-            </option>
-          </select>
-        </div>
-
-
-        <div className="filter-buttons">
-
-          <button
-            type="button"
-            className="search-button"
-          >
-            Search
-          </button>
-
-          <button
-            type="button"
-            className="reset-button"
-            onClick={resetFilters}
-          >
-            Reset
-          </button>
-
-        </div>
-
       </div>
 
+      {/* ================= EMPLOYEE CARDS ================= */}
 
-      {/* Result Count */}
-      <div className="employee-result">
-        Showing{" "}
-        <strong>
-          {filteredEmployees.length}
-        </strong>{" "}
-        employees
-      </div>
-
-
-      {/* Employee Cards */}
-      <div className="employee-grid">
-
-        {filteredEmployees.map((employee) => (
-
-          <div
-            className="employee-card"
-            key={employee.id}
-          >
-
-            {/* Employee Photo */}
-            <div className="employee-photo-wrapper">
+      {filteredEmployees.length > 0 ? (
+        <div
+          style={{
+            maxWidth: "1100px",
+            margin: "0 auto",
+            display: "grid",
+            gridTemplateColumns:
+              "repeat(auto-fit, minmax(250px, 1fr))",
+            gap: "20px",
+          }}
+        >
+          {filteredEmployees.map((employee) => (
+            <div
+              key={employee.id}
+              style={{
+                background: "#ffffff",
+                border: "1px solid #e2e8f0",
+                borderRadius: "14px",
+                padding: "22px",
+                textAlign: "center",
+                boxShadow:
+                  "0 5px 18px rgba(15, 23, 42, 0.06)",
+              }}
+            >
+              {/* Photo */}
 
               <img
                 src={employee.photo}
                 alt={employee.name}
+                style={{
+                  width: "90px",
+                  height: "90px",
+                  borderRadius: "50%",
+                  objectFit: "cover",
+                  border: "4px solid #eff6ff",
+                  marginBottom: "12px",
+                }}
               />
 
-            </div>
+              {/* Name */}
 
+              <h2
+                style={{
+                  margin: "0 0 6px",
+                  color: "#172033",
+                  fontSize: "19px",
+                }}
+              >
+                {employee.name}
+              </h2>
 
-            {/* Employee Name */}
-            <h2>
-              {employee.name}
-            </h2>
+              {/* Designation */}
 
-
-            {/* Employee Information */}
-            <div className="employee-info">
-
-              <p>
-                <span>
-                  Employee ID
-                </span>
-                <strong>
-                  {employee.id}
-                </strong>
+              <p
+                style={{
+                  margin: "0 0 6px",
+                  color: "#1769ff",
+                  fontSize: "14px",
+                  fontWeight: 600,
+                }}
+              >
+                {employee.designation}
               </p>
 
-              <p>
-                <span>
-                  Department
-                </span>
-                <strong>
-                  {employee.department}
-                </strong>
+              {/* Department */}
+
+              <p
+                style={{
+                  margin: "0 0 12px",
+                  color: "#64748b",
+                  fontSize: "13px",
+                }}
+              >
+                {employee.department}
               </p>
 
-              <p>
-                <span>
-                  Designation
-                </span>
-                <strong>
-                  {employee.designation}
-                </strong>
-              </p>
+              {/* Status */}
 
+              <span
+                style={{
+                  display: "inline-block",
+                  padding: "6px 13px",
+                  borderRadius: "20px",
+                  background:
+                    employee.status === "Active"
+                      ? "#ecfdf5"
+                      : "#fef2f2",
+                  color:
+                    employee.status === "Active"
+                      ? "#059669"
+                      : "#dc2626",
+                  fontSize: "12px",
+                  fontWeight: 600,
+                }}
+              >
+                ● {employee.status}
+              </span>
+
+              {/* View Details */}
+
+              <button
+                type="button"
+                onClick={() =>
+                  setSelectedEmployee(employee)
+                }
+                style={{
+                  width: "100%",
+                  marginTop: "18px",
+                  padding: "10px",
+                  border: "none",
+                  borderRadius: "8px",
+                  background: "#1769ff",
+                  color: "#ffffff",
+                  fontSize: "13px",
+                  fontWeight: 600,
+                  cursor: "pointer",
+                }}
+              >
+                View Details
+              </button>
             </div>
+          ))}
+        </div>
+      ) : (
+        <div
+          style={{
+            maxWidth: "700px",
+            margin: "40px auto",
+            background: "#ffffff",
+            padding: "40px",
+            borderRadius: "14px",
+            textAlign: "center",
+          }}
+        >
+          <h2
+            style={{
+              margin: "0 0 8px",
+              color: "#172033",
+            }}
+          >
+            No Employees Found
+          </h2>
 
-
-            {/* Status */}
-            <div
-              className={`status-badge ${
-                employee.status === "Active"
-                  ? "active"
-                  : "inactive"
-              }`}
-            >
-              {employee.status}
-            </div>
-
-          </div>
-
-        ))}
-
-      </div>
-
-
-      {/* No Results */}
-      {filteredEmployees.length === 0 && (
-
-        <div className="no-results">
-          <h3>
-            No employees found
-          </h3>
-
-          <p>
-            Try changing your search or filter options.
+          <p
+            style={{
+              margin: 0,
+              color: "#64748b",
+            }}
+          >
+            Try changing the search or department filter.
           </p>
         </div>
-
       )}
 
+      {/* ================= DETAILS MODAL ================= */}
+
+      {selectedEmployee && (
+        <div
+          style={{
+            position: "fixed",
+            inset: 0,
+            background:
+              "rgba(15, 23, 42, 0.60)",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            padding: "20px",
+            zIndex: 3000,
+          }}
+        >
+          <div
+            style={{
+              width: "100%",
+              maxWidth: "450px",
+              background: "#ffffff",
+              borderRadius: "16px",
+              padding: "30px",
+              position: "relative",
+              boxShadow:
+                "0 25px 60px rgba(15, 23, 42, 0.25)",
+            }}
+          >
+            {/* Close */}
+
+            <button
+              type="button"
+              onClick={() =>
+                setSelectedEmployee(null)
+              }
+              style={{
+                position: "absolute",
+                right: "18px",
+                top: "15px",
+                width: "32px",
+                height: "32px",
+                border: "none",
+                borderRadius: "50%",
+                background: "#f1f5f9",
+                color: "#475569",
+                fontSize: "18px",
+                cursor: "pointer",
+              }}
+            >
+              ×
+            </button>
+
+            {/* Profile */}
+
+            <div
+              style={{
+                textAlign: "center",
+                marginBottom: "25px",
+              }}
+            >
+              <img
+                src={selectedEmployee.photo}
+                alt={selectedEmployee.name}
+                style={{
+                  width: "105px",
+                  height: "105px",
+                  borderRadius: "50%",
+                  objectFit: "cover",
+                  border: "5px solid #eff6ff",
+                }}
+              />
+
+              <h2
+                style={{
+                  margin: "15px 0 5px",
+                  color: "#172033",
+                }}
+              >
+                {selectedEmployee.name}
+              </h2>
+
+              <p
+                style={{
+                  margin: 0,
+                  color: "#1769ff",
+                  fontWeight: 600,
+                }}
+              >
+                {selectedEmployee.designation}
+              </p>
+            </div>
+
+            {/* Details */}
+
+            <DetailRow
+              label="Employee ID"
+              value={String(selectedEmployee.id)}
+            />
+
+            <DetailRow
+              label="Department"
+              value={selectedEmployee.department}
+            />
+
+            <DetailRow
+              label="Designation"
+              value={selectedEmployee.designation}
+            />
+
+            <div
+              style={{
+                display: "flex",
+                justifyContent: "space-between",
+                padding: "14px 0",
+                borderBottom:
+                  "1px solid #e2e8f0",
+              }}
+            >
+              <span
+                style={{
+                  color: "#64748b",
+                  fontSize: "13px",
+                }}
+              >
+                Status
+              </span>
+
+              <span
+                style={{
+                  padding: "5px 11px",
+                  borderRadius: "20px",
+                  background:
+                    selectedEmployee.status ===
+                    "Active"
+                      ? "#ecfdf5"
+                      : "#fef2f2",
+                  color:
+                    selectedEmployee.status ===
+                    "Active"
+                      ? "#059669"
+                      : "#dc2626",
+                  fontSize: "12px",
+                  fontWeight: 600,
+                }}
+              >
+                {selectedEmployee.status}
+              </span>
+            </div>
+
+            <button
+              type="button"
+              onClick={() =>
+                setSelectedEmployee(null)
+              }
+              style={{
+                width: "100%",
+                marginTop: "22px",
+                padding: "11px",
+                border: "none",
+                borderRadius: "8px",
+                background: "#1769ff",
+                color: "#ffffff",
+                fontWeight: 600,
+                cursor: "pointer",
+              }}
+            >
+              Close
+            </button>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
+
+/* ================= HELPERS ================= */
+
+function DetailRow({
+  label,
+  value,
+}: {
+  label: string;
+  value: string;
+}) {
+  return (
+    <div
+      style={{
+        display: "flex",
+        justifyContent: "space-between",
+        gap: "20px",
+        padding: "14px 0",
+        borderBottom: "1px solid #e2e8f0",
+      }}
+    >
+      <span
+        style={{
+          color: "#64748b",
+          fontSize: "13px",
+        }}
+      >
+        {label}
+      </span>
+
+      <strong
+        style={{
+          color: "#334155",
+          fontSize: "13px",
+          textAlign: "right",
+        }}
+      >
+        {value}
+      </strong>
+    </div>
+  );
+}
+
+const labelStyle: React.CSSProperties = {
+  display: "block",
+  marginBottom: "7px",
+  color: "#334155",
+  fontSize: "12px",
+  fontWeight: 600,
+};
+
+const inputStyle: React.CSSProperties = {
+  width: "100%",
+  padding: "11px 12px",
+  border: "1px solid #cbd5e1",
+  borderRadius: "8px",
+  outline: "none",
+  fontSize: "13px",
+  color: "#334155",
+  background: "#ffffff",
+};
 
 export default EmployeeDirectory;

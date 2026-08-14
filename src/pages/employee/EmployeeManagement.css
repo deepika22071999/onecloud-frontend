@@ -1,0 +1,365 @@
+/* =========================================
+   EMPLOYEE MANAGEMENT PAGE
+========================================= */
+
+.management-page {
+  min-height: calc(100vh - 76px);
+  padding: 45px 60px 60px;
+  background: #f4f7fb;
+}
+
+
+/* =========================================
+   PAGE HEADER
+========================================= */
+
+.management-header {
+  max-width: 1200px;
+  margin: 0 auto 30px;
+  text-align: center;
+}
+
+.management-header h1 {
+  margin: 0 0 10px;
+  color: #1769ff;
+  font-size: 32px;
+  font-weight: 700;
+}
+
+.management-header p {
+  margin: 0;
+  color: #64748b;
+  font-size: 15px;
+}
+
+
+/* =========================================
+   EMPLOYEE SUMMARY
+========================================= */
+
+.management-summary {
+  max-width: 1200px;
+  margin: 0 auto 22px;
+
+  background: #ffffff;
+
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+
+  padding: 18px 24px;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  box-shadow: 0 4px 14px rgba(15, 23, 42, 0.06);
+}
+
+.management-summary span {
+  color: #475569;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.management-summary strong {
+  color: #1769ff;
+  font-size: 24px;
+}
+
+
+/* =========================================
+   MAIN MANAGEMENT CARD
+========================================= */
+
+.management-card {
+  max-width: 1200px;
+  margin: 0 auto;
+
+  background: #ffffff;
+
+  border: 1px solid #e2e8f0;
+  border-radius: 14px;
+
+  box-shadow: 0 6px 20px rgba(15, 23, 42, 0.07);
+
+  overflow: hidden;
+}
+
+
+/* =========================================
+   CARD HEADER
+========================================= */
+
+.management-card-header {
+  padding: 24px 28px;
+
+  border-bottom: 1px solid #e2e8f0;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.management-card-header h2 {
+  margin: 0 0 6px;
+
+  color: #1e293b;
+
+  font-size: 20px;
+  font-weight: 700;
+}
+
+.management-card-header p {
+  margin: 0;
+
+  color: #64748b;
+
+  font-size: 13px;
+}
+
+
+/* =========================================
+   TABLE CONTAINER
+========================================= */
+
+.management-table-container {
+  width: 100%;
+  overflow-x: auto;
+}
+
+
+/* =========================================
+   TABLE
+========================================= */
+
+.management-table {
+  width: 100%;
+
+  border-collapse: collapse;
+
+  min-width: 850px;
+}
+
+.management-table thead {
+  background: #f8fafc;
+}
+
+.management-table th {
+  padding: 16px 20px;
+
+  text-align: left;
+
+  color: #475569;
+
+  font-size: 13px;
+  font-weight: 700;
+
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.management-table td {
+  padding: 17px 20px;
+
+  color: #475569;
+
+  font-size: 14px;
+
+  border-bottom: 1px solid #eef2f7;
+}
+
+
+/* =========================================
+   TABLE ROW
+========================================= */
+
+.management-table tbody tr {
+  transition: background 0.2s ease;
+}
+
+.management-table tbody tr:hover {
+  background: #f8fbff;
+}
+
+.management-table tbody tr:last-child td {
+  border-bottom: none;
+}
+
+
+/* =========================================
+   EMPLOYEE ID
+========================================= */
+
+.employee-id {
+  display: inline-flex;
+
+  align-items: center;
+  justify-content: center;
+
+  min-width: 55px;
+
+  padding: 5px 9px;
+
+  border-radius: 6px;
+
+  background: #eff6ff;
+
+  color: #1769ff;
+
+  font-size: 12px;
+  font-weight: 700;
+}
+
+
+/* =========================================
+   EMPLOYEE NAME
+========================================= */
+
+.employee-name {
+  color: #1e293b;
+
+  font-weight: 600;
+}
+
+
+/* =========================================
+   STATUS
+========================================= */
+
+.management-status {
+  display: inline-flex;
+
+  align-items: center;
+  justify-content: center;
+
+  min-width: 72px;
+
+  padding: 6px 12px;
+
+  border-radius: 20px;
+
+  font-size: 12px;
+
+  font-weight: 700;
+}
+
+.management-status.active {
+  background: #ecfdf5;
+  color: #059669;
+}
+
+.management-status.inactive {
+  background: #fef2f2;
+  color: #dc2626;
+}
+
+
+/* =========================================
+   DELETE BUTTON
+========================================= */
+
+.management-delete-button {
+  border: none;
+
+  background: #fee2e2;
+  color: #dc2626;
+
+  padding: 8px 14px;
+
+  border-radius: 7px;
+
+  font-size: 12px;
+  font-weight: 600;
+
+  cursor: pointer;
+
+  transition: all 0.2s ease;
+}
+
+.management-delete-button:hover {
+  background: #dc2626;
+  color: #ffffff;
+}
+
+
+/* =========================================
+   NO RESULTS
+========================================= */
+
+.management-no-results {
+  padding: 50px 20px;
+
+  text-align: center;
+}
+
+.management-no-results h3 {
+  margin: 0 0 8px;
+
+  color: #1e293b;
+
+  font-size: 18px;
+}
+
+.management-no-results p {
+  margin: 0;
+
+  color: #64748b;
+
+  font-size: 14px;
+}
+
+
+/* =========================================
+   RESPONSIVE
+========================================= */
+
+@media (max-width: 900px) {
+
+  .management-page {
+    padding: 35px 25px 50px;
+  }
+
+  .management-header h1 {
+    font-size: 28px;
+  }
+
+  .management-card-header {
+    padding: 20px;
+  }
+
+  .management-table th,
+  .management-table td {
+    padding: 14px 16px;
+  }
+}
+
+
+@media (max-width: 600px) {
+
+  .management-page {
+    padding: 25px 15px 40px;
+  }
+
+  .management-header h1 {
+    font-size: 24px;
+  }
+
+  .management-header p {
+    font-size: 13px;
+  }
+
+  .management-summary {
+    padding: 15px 18px;
+  }
+
+  .management-summary strong {
+    font-size: 20px;
+  }
+
+  .management-card-header {
+    padding: 18px;
+  }
+
+  .management-card-header h2 {
+    font-size: 18px;
+  }
+}

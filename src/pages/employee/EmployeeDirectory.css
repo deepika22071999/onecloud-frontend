@@ -1,27 +1,25 @@
 /* =========================================
-   Employee Directory Page
+   EMPLOYEE DIRECTORY PAGE
 ========================================= */
 
 .employee-page {
   width: 100%;
-  min-height: 100vh;
+  min-height: calc(100vh - 76px);
 
-  padding: 40px 50px 70px;
+  padding: 45px 40px 70px;
 
-  background: #f5f7fb;
-
-  box-sizing: border-box;
+  background: #f4f7fb;
 }
 
 
 /* =========================================
-   Header
+   HEADER
 ========================================= */
 
 .employee-header {
   text-align: center;
 
-  margin-bottom: 38px;
+  margin-bottom: 35px;
 }
 
 .employee-header h1 {
@@ -29,54 +27,55 @@
 
   color: #1769ff;
 
-  font-size: 40px;
+  font-size: 36px;
   font-weight: 700;
-
-  letter-spacing: -0.5px;
 }
 
 .employee-header p {
-  margin-top: 10px;
+  margin: 10px 0 0;
 
-  color: #667085;
+  color: #64748b;
 
-  font-size: 16px;
+  font-size: 15px;
 }
 
 
 /* =========================================
-   Filter Panel
+   FILTER PANEL
 ========================================= */
 
 .employee-filter-panel {
-  width: 100%;
-  max-width: 1350px;
+  width: min(1100px, 100%);
 
-  margin: 0 auto 28px;
-
-  padding: 28px 32px;
-
-  display: flex;
-  align-items: flex-end;
-  justify-content: center;
-
-  gap: 22px;
+  margin: 0 auto 25px;
 
   background: #ffffff;
 
-  border: 1px solid #e4e7ec;
+  border: 1px solid #e2e8f0;
 
-  border-radius: 12px;
+  border-radius: 14px;
+
+  padding: 25px;
+
+  display: grid;
+
+  grid-template-columns:
+    1.4fr
+    1fr
+    1fr
+    auto;
+
+  align-items: end;
+
+  gap: 18px;
 
   box-shadow:
-    0 4px 12px rgba(16, 24, 40, 0.06);
-
-  box-sizing: border-box;
+    0 6px 20px rgba(15, 23, 42, 0.06);
 }
 
 
 /* =========================================
-   Filter Group
+   FILTER GROUP
 ========================================= */
 
 .filter-group {
@@ -84,49 +83,34 @@
 
   flex-direction: column;
 
-  gap: 8px;
+  gap: 7px;
 }
 
 .filter-group label {
-  font-size: 14px;
+  font-size: 12px;
 
   font-weight: 600;
 
-  color: #344054;
+  color: #334155;
 }
-
-
-/* =========================================
-   Inputs / Select
-========================================= */
 
 .filter-group input,
 .filter-group select {
-  height: 46px;
+  height: 40px;
 
-  padding: 0 14px;
+  padding: 0 12px;
 
-  border: 1px solid #d0d5dd;
+  border: 1px solid #cbd5e1;
 
   border-radius: 7px;
 
-  background: #ffffff;
-
-  color: #101828;
-
-  font-size: 15px;
-
   outline: none;
 
-  box-sizing: border-box;
-}
+  font-size: 13px;
 
-.filter-group input {
-  width: 330px;
-}
+  background: #ffffff;
 
-.filter-group select {
-  width: 220px;
+  color: #1e293b;
 }
 
 .filter-group input:focus,
@@ -139,70 +123,69 @@
 
 
 /* =========================================
-   Buttons
+   FILTER BUTTONS
 ========================================= */
 
 .filter-buttons {
   display: flex;
 
-  gap: 10px;
+  gap: 8px;
 }
 
 .search-button,
 .reset-button {
-  height: 46px;
+  height: 40px;
 
-  padding: 0 20px;
+  padding: 0 18px;
 
   border-radius: 7px;
 
-  font-size: 15px;
+  font-size: 13px;
 
   font-weight: 600;
 
   cursor: pointer;
 
-  transition: all 0.2s ease;
+  transition: 0.2s ease;
 }
 
 .search-button {
-  border: 1px solid #1769ff;
+  border: none;
 
   background: #1769ff;
 
-  color: #ffffff;
+  color: white;
 }
 
 .search-button:hover {
-  background: #0d55d9;
+  background: #0f56d9;
 }
 
 .reset-button {
-  border: 1px solid #d0d5dd;
+  border: 1px solid #cbd5e1;
 
   background: #ffffff;
 
-  color: #344054;
+  color: #475569;
 }
 
 .reset-button:hover {
-  background: #f2f4f7;
+  background: #f1f5f9;
 }
 
 
 /* =========================================
-   Result Count
+   RESULT COUNT
 ========================================= */
 
 .employee-result {
-  width: 100%;
-  max-width: 1350px;
+  width: min(1100px, 100%);
 
-  margin: 0 auto 20px;
+  margin: 0 auto 18px;
 
-  color: #667085;
+  color: #64748b;
 
-  font-size: 14px;
+  font-size: 13px;
 }
 
 .employee-result strong {
@@ -211,51 +194,42 @@
 
 
 /* =========================================
-   Employee Grid
+   EMPLOYEE CARD GRID
 ========================================= */
 
-.employee-grid {
-  width: 100%;
-  max-width: 1350px;
+.employee-cards {
+  width: min(1100px, 100%);
 
   margin: 0 auto;
 
   display: grid;
 
   grid-template-columns:
-    repeat(3, minmax(0, 1fr));
+    repeat(3, 1fr);
 
-  gap: 28px;
+  gap: 22px;
 }
 
 
 /* =========================================
-   Employee Card
+   EMPLOYEE CARD
 ========================================= */
 
 .employee-card {
-  min-height: 340px;
-
-  padding: 30px 25px;
-
-  display: flex;
-
-  flex-direction: column;
-
-  align-items: center;
-
-  text-align: center;
+  min-height: 315px;
 
   background: #ffffff;
 
-  border: 1px solid #e4e7ec;
+  border: 1px solid #e2e8f0;
 
-  border-radius: 12px;
+  border-radius: 14px;
+
+  padding: 25px;
+
+  text-align: center;
 
   box-shadow:
-    0 3px 12px rgba(16, 24, 40, 0.06);
-
-  box-sizing: border-box;
+    0 6px 18px rgba(15, 23, 42, 0.06);
 
   transition:
     transform 0.2s ease,
@@ -263,50 +237,44 @@
 }
 
 .employee-card:hover {
-  transform: translateY(-5px);
+  transform: translateY(-4px);
 
   box-shadow:
-    0 10px 24px rgba(16, 24, 40, 0.12);
+    0 12px 28px rgba(15, 23, 42, 0.1);
 }
 
 
 /* =========================================
-   Employee Photo
+   PHOTO
 ========================================= */
 
 .employee-photo-wrapper {
-  width: 120px;
-  height: 120px;
+  width: 92px;
 
-  margin-bottom: 18px;
+  height: 92px;
+
+  margin: 0 auto 14px;
 
   border-radius: 50%;
 
-  padding: 3px;
+  overflow: hidden;
 
-  background: #1769ff;
+  border: 3px solid #1769ff;
 
-  box-sizing: border-box;
+  background: #eff6ff;
 }
 
 .employee-photo-wrapper img {
   width: 100%;
+
   height: 100%;
 
-  display: block;
-
   object-fit: cover;
-
-  border-radius: 50%;
-
-  border: 3px solid #ffffff;
-
-  box-sizing: border-box;
 }
 
 
 /* =========================================
-   Employee Name
+   NAME
 ========================================= */
 
 .employee-card h2 {
@@ -314,24 +282,24 @@
 
   color: #1769ff;
 
-  font-size: 24px;
+  font-size: 21px;
 
   font-weight: 700;
 }
 
 
 /* =========================================
-   Employee Information
+   INFORMATION
 ========================================= */
 
 .employee-info {
-  width: 100%;
-
   display: flex;
 
   flex-direction: column;
 
-  gap: 10px;
+  gap: 9px;
+
+  margin-bottom: 18px;
 }
 
 .employee-info p {
@@ -343,17 +311,17 @@
 
   gap: 15px;
 
-  font-size: 14px;
+  font-size: 13px;
 
-  text-align: left;
+  color: #64748b;
 }
 
 .employee-info span {
-  color: #667085;
+  color: #64748b;
 }
 
 .employee-info strong {
-  color: #344054;
+  color: #1e293b;
 
   font-weight: 600;
 
@@ -362,125 +330,147 @@
 
 
 /* =========================================
-   Status Badge
+   STATUS
 ========================================= */
 
 .status-badge {
-  margin-top: 20px;
+  display: inline-flex;
 
-  padding: 6px 18px;
+  align-items: center;
+
+  justify-content: center;
+
+  min-width: 70px;
+
+  padding: 6px 12px;
 
   border-radius: 20px;
 
-  font-size: 13px;
+  font-size: 12px;
 
-  font-weight: 700;
+  font-weight: 600;
+
+  margin-bottom: 10px;
 }
 
 .status-badge.active {
-  background: #ecfdf3;
+  background: #dcfce7;
 
-  color: #027a48;
+  color: #15803d;
 }
 
 .status-badge.inactive {
-  background: #fef3f2;
+  background: #fee2e2;
 
-  color: #b42318;
+  color: #dc2626;
 }
 
 
 /* =========================================
-   No Results
+   VIEW DETAILS
+========================================= */
+
+.view-details-button {
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  width: 130px;
+
+  height: 38px;
+
+  margin: 0 auto;
+
+  border-radius: 7px;
+
+  background: #1769ff;
+
+  color: #ffffff;
+
+  text-decoration: none;
+
+  font-size: 13px;
+
+  font-weight: 600;
+
+  transition: 0.2s ease;
+}
+
+.view-details-button:hover {
+  background: #0f56d9;
+
+  box-shadow:
+    0 5px 12px rgba(23, 105, 255, 0.2);
+}
+
+
+/* =========================================
+   NO RESULTS
 ========================================= */
 
 .no-results {
-  width: 100%;
-  max-width: 600px;
+  width: min(700px, 100%);
 
-  margin: 50px auto;
+  margin: 30px auto;
 
   padding: 40px;
 
-  text-align: center;
-
   background: #ffffff;
 
-  border: 1px solid #e4e7ec;
+  border-radius: 14px;
 
-  border-radius: 12px;
+  text-align: center;
+
+  border: 1px solid #e2e8f0;
 }
 
 .no-results h3 {
-  margin: 0 0 8px;
+  margin: 0;
 
-  color: #344054;
-
-  font-size: 20px;
+  color: #334155;
 }
 
 .no-results p {
-  margin: 0;
-
-  color: #667085;
+  color: #64748b;
 }
 
 
 /* =========================================
-   Tablet
+   RESPONSIVE
 ========================================= */
 
-@media (max-width: 1100px) {
+@media (max-width: 950px) {
 
-  .employee-page {
-    padding: 35px 30px 60px;
+  .employee-cards {
+    grid-template-columns:
+      repeat(2, 1fr);
   }
 
   .employee-filter-panel {
-    flex-wrap: wrap;
-
-    align-items: flex-end;
-  }
-
-  .employee-grid {
     grid-template-columns:
-      repeat(2, minmax(0, 1fr));
+      1fr 1fr;
   }
-
 }
 
 
-/* =========================================
-   Mobile
-========================================= */
-
-@media (max-width: 700px) {
+@media (max-width: 650px) {
 
   .employee-page {
-    padding: 25px 15px 50px;
-  }
-
-  .employee-header {
-    margin-bottom: 25px;
+    padding: 30px 20px 50px;
   }
 
   .employee-header h1 {
-    font-size: 32px;
+    font-size: 30px;
+  }
+
+  .employee-cards {
+    grid-template-columns: 1fr;
   }
 
   .employee-filter-panel {
-    flex-direction: column;
-
-    align-items: stretch;
-
-    gap: 16px;
-
-    padding: 20px;
-  }
-
-  .filter-group input,
-  .filter-group select {
-    width: 100%;
+    grid-template-columns: 1fr;
   }
 
   .filter-buttons {
@@ -491,15 +481,4 @@
   .reset-button {
     flex: 1;
   }
-
-  .employee-grid {
-    grid-template-columns: 1fr;
-
-    gap: 20px;
-  }
-
-  .employee-card {
-    min-height: auto;
-  }
-
 }
