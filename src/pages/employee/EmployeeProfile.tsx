@@ -1,31 +1,80 @@
-import { useState } from "react";
+import { useMemo } from "react";
+import { useSearchParams, Link } from "react-router-dom";
 import { useEmployeeContext } from "../../context/EmployeeContext";
-import type { Employee } from "./employeeData";
 
 function EmployeeProfile() {
   const { employees } = useEmployeeContext();
+  const [searchParams] = useSearchParams();
 
-  const [selectedEmployee, setSelectedEmployee] =
-    useState<Employee | null>(employees[0] || null);
+  const employeeId = Number(
+    searchParams.get("id")
+  );
 
-  if (employees.length === 0) {
+  const employee = useMemo(() => {
+    return employees.find(
+      (item) => item.id === employeeId
+    );
+  }, [employees, employeeId]);
+
+  // If no employee is selected
+  if (!employee) {
     return (
       <div
         style={{
           minHeight: "calc(100vh - 76px)",
           background: "#f4f7fb",
-          padding: "50px 30px",
-          textAlign: "center",
-          fontFamily: "Arial, Helvetica, sans-serif",
+          padding: "40px 30px",
+          fontFamily:
+            "Arial, Helvetica, sans-serif",
         }}
       >
-        <h1 style={{ color: "#1769ff" }}>
-          Employee Profile
-        </h1>
+        <div
+          style={{
+            maxWidth: "900px",
+            margin: "0 auto",
+            background: "#ffffff",
+            border: "1px solid #e2e8f0",
+            borderRadius: "14px",
+            padding: "40px",
+            textAlign: "center",
+          }}
+        >
+          <h2
+            style={{
+              color: "#172033",
+              marginBottom: "10px",
+            }}
+          >
+            Employee Not Found
+          </h2>
 
-        <p style={{ color: "#64748b" }}>
-          No employee records available.
-        </p>
+          <p
+            style={{
+              color: "#64748b",
+              fontSize: "14px",
+              marginBottom: "20px",
+            }}
+          >
+            Please select an employee to view
+            the profile.
+          </p>
+
+          <Link
+            to="/employees"
+            style={{
+              display: "inline-block",
+              padding: "10px 18px",
+              background: "#1769ff",
+              color: "#ffffff",
+              borderRadius: "8px",
+              textDecoration: "none",
+              fontSize: "13px",
+              fontWeight: 600,
+            }}
+          >
+            Back to Employees
+          </Link>
+        </div>
       </div>
     );
   }
@@ -36,255 +85,359 @@ function EmployeeProfile() {
         minHeight: "calc(100vh - 76px)",
         background: "#f4f7fb",
         padding: "40px 30px 60px",
-        fontFamily: "Arial, Helvetica, sans-serif",
+        fontFamily:
+          "Arial, Helvetica, sans-serif",
       }}
     >
-      {/* ================= HEADER ================= */}
-
       <div
         style={{
           maxWidth: "1100px",
-          margin: "0 auto 30px",
+          margin: "0 auto",
         }}
       >
-        <p
-          style={{
-            margin: "0 0 6px",
-            color: "#1769ff",
-            fontSize: "13px",
-            fontWeight: 700,
-          }}
-        >
-          EMPLOYEE MODULE
-        </p>
+        {/* ================= HEADER ================= */}
 
-        <h1
-          style={{
-            margin: 0,
-            color: "#172033",
-            fontSize: "30px",
-          }}
-        >
-          Employee Profile
-        </h1>
-
-        <p
-          style={{
-            margin: "8px 0 0",
-            color: "#64748b",
-            fontSize: "14px",
-          }}
-        >
-          View detailed employee information
-        </p>
-      </div>
-
-      {/* ================= EMPLOYEE SELECTOR ================= */}
-
-      <div
-        style={{
-          maxWidth: "1100px",
-          margin: "0 auto 25px",
-          background: "#ffffff",
-          borderRadius: "14px",
-          padding: "20px",
-          border: "1px solid #e2e8f0",
-          boxShadow:
-            "0 5px 18px rgba(15, 23, 42, 0.06)",
-        }}
-      >
-        <label
-          style={{
-            display: "block",
-            marginBottom: "8px",
-            color: "#334155",
-            fontSize: "13px",
-            fontWeight: 600,
-          }}
-        >
-          Select Employee
-        </label>
-
-        <select
-          value={selectedEmployee?.id ?? ""}
-          onChange={(e) => {
-            const employee = employees.find(
-              (item) =>
-                item.id === Number(e.target.value)
-            );
-
-            setSelectedEmployee(employee || null);
-          }}
-          style={{
-            width: "100%",
-            padding: "11px 12px",
-            border: "1px solid #cbd5e1",
-            borderRadius: "8px",
-            outline: "none",
-            fontSize: "14px",
-            color: "#334155",
-            background: "#ffffff",
-          }}
-        >
-          {employees.map((employee) => (
-            <option
-              key={employee.id}
-              value={employee.id}
-            >
-              {employee.name} - {employee.designation}
-            </option>
-          ))}
-        </select>
-      </div>
-
-      {/* ================= PROFILE CARD ================= */}
-
-      {selectedEmployee && (
         <div
           style={{
-            maxWidth: "1100px",
-            margin: "0 auto",
-            background: "#ffffff",
-            borderRadius: "18px",
-            border: "1px solid #e2e8f0",
-            overflow: "hidden",
-            boxShadow:
-              "0 8px 25px rgba(15, 23, 42, 0.08)",
+            marginBottom: "25px",
           }}
         >
-          {/* Profile Top */}
-
-          <div
+          <p
             style={{
-              background:
-                "linear-gradient(135deg, #1769ff, #4f8cff)",
-              padding: "35px",
-              display: "flex",
-              alignItems: "center",
-              gap: "25px",
+              margin: "0 0 7px",
+              color: "#1769ff",
+              fontSize: "13px",
+              fontWeight: 700,
             }}
           >
-            <img
-              src={selectedEmployee.photo}
-              alt={selectedEmployee.name}
-              style={{
-                width: "115px",
-                height: "115px",
-                borderRadius: "50%",
-                objectFit: "cover",
-                border: "5px solid #ffffff",
-                background: "#ffffff",
-              }}
-            />
+            HRMS • EMPLOYEE
+          </p>
 
-            <div>
+          <h1
+            style={{
+              margin: "0 0 7px",
+              color: "#172033",
+              fontSize: "30px",
+            }}
+          >
+            Employee Profile
+          </h1>
+
+          <p
+            style={{
+              margin: 0,
+              color: "#64748b",
+              fontSize: "14px",
+            }}
+          >
+            View employee information and
+            employment details.
+          </p>
+        </div>
+
+        {/* ================= PROFILE HEADER ================= */}
+
+        <div
+          style={{
+            background: "#ffffff",
+            border: "1px solid #e2e8f0",
+            borderRadius: "14px",
+            padding: "28px",
+            marginBottom: "22px",
+            boxShadow:
+              "0 5px 18px rgba(15,23,42,0.05)",
+          }}
+        >
+          <div
+            style={{
+              display: "flex",
+              alignItems: "center",
+              gap: "22px",
+              flexWrap: "wrap",
+            }}
+          >
+            {/* AVATAR */}
+
+            <div
+              style={{
+                width: "85px",
+                height: "85px",
+                borderRadius: "50%",
+                background: "#eff6ff",
+                color: "#1769ff",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                fontSize: "30px",
+                fontWeight: 700,
+              }}
+            >
+              {employee.name
+                .charAt(0)
+                .toUpperCase()}
+            </div>
+
+            {/* NAME */}
+
+            <div style={{ flex: 1 }}>
               <h2
                 style={{
-                  margin: "0 0 7px",
-                  color: "#ffffff",
-                  fontSize: "27px",
+                  margin: "0 0 6px",
+                  color: "#172033",
+                  fontSize: "24px",
                 }}
               >
-                {selectedEmployee.name}
+                {employee.name}
               </h2>
 
               <p
                 style={{
-                  margin: "0 0 10px",
-                  color: "#eaf2ff",
-                  fontSize: "15px",
+                  margin: "0 0 8px",
+                  color: "#64748b",
+                  fontSize: "14px",
                 }}
               >
-                {selectedEmployee.designation}
+                {employee.designation}
               </p>
 
               <span
                 style={{
                   display: "inline-block",
-                  padding: "6px 13px",
+                  padding: "6px 11px",
                   borderRadius: "20px",
                   background:
-                    selectedEmployee.status ===
+                    employee.status ===
                     "Active"
-                      ? "#dcfce7"
-                      : "#fee2e2",
+                      ? "#ecfdf5"
+                      : "#fef2f2",
                   color:
-                    selectedEmployee.status ===
+                    employee.status ===
                     "Active"
-                      ? "#15803d"
+                      ? "#059669"
                       : "#dc2626",
                   fontSize: "12px",
-                  fontWeight: 700,
+                  fontWeight: 600,
                 }}
               >
-                {selectedEmployee.status}
+                {employee.status}
               </span>
             </div>
-          </div>
 
-          {/* Details Section */}
+            {/* BACK */}
+
+            <Link
+              to="/employees"
+              style={{
+                padding: "9px 15px",
+                border:
+                  "1px solid #cbd5e1",
+                borderRadius: "8px",
+                color: "#475569",
+                background: "#ffffff",
+                textDecoration: "none",
+                fontSize: "13px",
+                fontWeight: 600,
+              }}
+            >
+              ← Back
+            </Link>
+          </div>
+        </div>
+
+        {/* ================= BASIC INFORMATION ================= */}
+
+        <ProfileSection title="Basic Information">
+          <InfoItem
+            label="Employee ID"
+            value={String(employee.id)}
+          />
+
+          <InfoItem
+            label="Full Name"
+            value={employee.name}
+          />
+
+          <InfoItem
+            label="Department"
+            value={employee.department}
+          />
+
+          <InfoItem
+            label="Designation"
+            value={employee.designation}
+          />
+
+          <InfoItem
+            label="Employment Status"
+            value={employee.status}
+          />
+        </ProfileSection>
+
+        {/* ================= CONTACT INFORMATION ================= */}
+
+        <ProfileSection title="Contact Information">
+          <InfoItem
+            label="Email"
+            value={
+              "email" in employee
+                ? String(
+                    employee.email || "-"
+                  )
+                : "-"
+            }
+          />
+
+          <InfoItem
+            label="Phone"
+            value={
+              "phone" in employee
+                ? String(
+                    employee.phone || "-"
+                  )
+                : "-"
+            }
+          />
+
+          <InfoItem
+            label="Address"
+            value={
+              "address" in employee
+                ? String(
+                    employee.address || "-"
+                  )
+                : "-"
+            }
+          />
+        </ProfileSection>
+
+        {/* ================= EMPLOYMENT DETAILS ================= */}
+
+        <ProfileSection title="Employment Details">
+          <InfoItem
+            label="Department"
+            value={employee.department}
+          />
+
+          <InfoItem
+            label="Designation"
+            value={employee.designation}
+          />
+
+          <InfoItem
+            label="Status"
+            value={employee.status}
+          />
+
+          <InfoItem
+            label="Employee ID"
+            value={String(employee.id)}
+          />
+        </ProfileSection>
+
+        {/* ================= QUICK ACTIONS ================= */}
+
+        <div
+          style={{
+            background: "#ffffff",
+            border: "1px solid #e2e8f0",
+            borderRadius: "14px",
+            padding: "25px",
+            boxShadow:
+              "0 5px 18px rgba(15,23,42,0.05)",
+          }}
+        >
+          <h2
+            style={{
+              margin: "0 0 18px",
+              color: "#172033",
+              fontSize: "20px",
+            }}
+          >
+            Quick Actions
+          </h2>
 
           <div
             style={{
-              padding: "30px",
+              display: "flex",
+              gap: "12px",
+              flexWrap: "wrap",
             }}
           >
-            <h3
-              style={{
-                margin: "0 0 20px",
-                color: "#172033",
-                fontSize: "20px",
-              }}
+            <Link
+              to="/employees"
+              style={actionStyle}
             >
-              Employee Information
-            </h3>
+              Employee Directory
+            </Link>
 
-            <div
-              style={{
-                display: "grid",
-                gridTemplateColumns:
-                  "repeat(auto-fit, minmax(280px, 1fr))",
-                gap: "18px",
-              }}
+            <Link
+              to="/attendance"
+              style={actionStyle}
             >
-              <ProfileDetail
-                label="Employee ID"
-                value={String(selectedEmployee.id)}
-              />
+              Attendance
+            </Link>
 
-              <ProfileDetail
-                label="Employee Name"
-                value={selectedEmployee.name}
-              />
-
-              <ProfileDetail
-                label="Department"
-                value={selectedEmployee.department}
-              />
-
-              <ProfileDetail
-                label="Designation"
-                value={selectedEmployee.designation}
-              />
-
-              <ProfileDetail
-                label="Employment Status"
-                value={selectedEmployee.status}
-              />
-
-              <ProfileDetail
-                label="Profile Type"
-                value="Employee"
-              />
-            </div>
+            <Link
+              to="/leave"
+              style={actionStyle}
+            >
+              Leave Management
+            </Link>
           </div>
         </div>
-      )}
+      </div>
     </div>
   );
 }
 
-function ProfileDetail({
+// ================= PROFILE SECTION =================
+
+function ProfileSection({
+  title,
+  children,
+}: {
+  title: string;
+  children: React.ReactNode;
+}) {
+  return (
+    <div
+      style={{
+        background: "#ffffff",
+        border: "1px solid #e2e8f0",
+        borderRadius: "14px",
+        padding: "25px",
+        marginBottom: "22px",
+        boxShadow:
+          "0 5px 18px rgba(15,23,42,0.05)",
+      }}
+    >
+      <h2
+        style={{
+          margin: "0 0 20px",
+          color: "#172033",
+          fontSize: "20px",
+        }}
+      >
+        {title}
+      </h2>
+
+      <div
+        style={{
+          display: "grid",
+          gridTemplateColumns:
+            "repeat(auto-fit, minmax(220px, 1fr))",
+          gap: "18px",
+        }}
+      >
+        {children}
+      </div>
+    </div>
+  );
+}
+
+// ================= INFO ITEM =================
+
+function InfoItem({
   label,
   value,
 }: {
@@ -294,35 +447,47 @@ function ProfileDetail({
   return (
     <div
       style={{
-        padding: "18px",
+        padding: "15px",
+        background: "#f8fafc",
         border: "1px solid #e2e8f0",
         borderRadius: "10px",
-        background: "#f8fafc",
       }}
     >
       <p
         style={{
-          margin: "0 0 7px",
-          color: "#64748b",
-          fontSize: "12px",
+          margin: "0 0 6px",
+          color: "#94a3b8",
+          fontSize: "11px",
           fontWeight: 600,
+          textTransform: "uppercase",
         }}
       >
         {label}
       </p>
 
-      <p
+      <strong
         style={{
-          margin: 0,
-          color: "#1e293b",
-          fontSize: "15px",
-          fontWeight: 700,
+          color: "#334155",
+          fontSize: "14px",
         }}
       >
         {value}
-      </p>
+      </strong>
     </div>
   );
 }
+
+// ================= ACTION STYLE =================
+
+const actionStyle = {
+  display: "inline-block",
+  padding: "10px 16px",
+  borderRadius: "8px",
+  background: "#eff6ff",
+  color: "#1769ff",
+  textDecoration: "none",
+  fontSize: "13px",
+  fontWeight: 600,
+};
 
 export default EmployeeProfile;

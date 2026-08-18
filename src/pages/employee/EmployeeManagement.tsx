@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useEmployeeContext } from "../../context/EmployeeContext";
 import type { Employee } from "./employeeData";
+import type { CSSProperties } from "react";
 
 function EmployeeManagement() {
   const {
@@ -47,10 +48,15 @@ function EmployeeManagement() {
 
   const filteredEmployees = employees.filter(
     (employee) => {
-      const search = searchTerm.toLowerCase();
+      const search = searchTerm
+        .toLowerCase()
+        .trim();
 
       const matchesSearch =
         employee.name
+          .toLowerCase()
+          .includes(search) ||
+        employee.department
           .toLowerCase()
           .includes(search) ||
         employee.designation
@@ -102,9 +108,9 @@ function EmployeeManagement() {
 
     updateEmployee({
       ...editingEmployee,
-      name: formData.name,
+      name: formData.name.trim(),
       department: formData.department,
-      designation: formData.designation,
+      designation: formData.designation.trim(),
       status: formData.status,
     });
 
@@ -391,8 +397,7 @@ function EmployeeManagement() {
 
         <div
           style={{
-            padding:
-              "12px 22px",
+            padding: "12px 22px",
             background: "#f8fafc",
             borderBottom:
               "1px solid #e2e8f0",
@@ -425,8 +430,7 @@ function EmployeeManagement() {
           <table
             style={{
               width: "100%",
-              borderCollapse:
-                "collapse",
+              borderCollapse: "collapse",
               minWidth: "850px",
             }}
           >
@@ -468,9 +472,7 @@ function EmployeeManagement() {
                   <tr
                     key={employee.id}
                   >
-                    <td
-                      style={tdStyle}
-                    >
+                    <td style={tdStyle}>
                       {employee.id}
                     </td>
 
@@ -483,25 +485,15 @@ function EmployeeManagement() {
                       {employee.name}
                     </td>
 
-                    <td
-                      style={tdStyle}
-                    >
-                      {
-                        employee.department
-                      }
+                    <td style={tdStyle}>
+                      {employee.department}
                     </td>
 
-                    <td
-                      style={tdStyle}
-                    >
-                      {
-                        employee.designation
-                      }
+                    <td style={tdStyle}>
+                      {employee.designation}
                     </td>
 
-                    <td
-                      style={tdStyle}
-                    >
+                    <td style={tdStyle}>
                       <span
                         style={{
                           padding:
@@ -523,15 +515,11 @@ function EmployeeManagement() {
                           fontWeight: 600,
                         }}
                       >
-                        {
-                          employee.status
-                        }
+                        {employee.status}
                       </span>
                     </td>
 
-                    <td
-                      style={tdStyle}
-                    >
+                    <td style={tdStyle}>
                       <div
                         style={{
                           display:
@@ -623,8 +611,7 @@ function EmployeeManagement() {
               "rgba(15, 23, 42, 0.60)",
             display: "flex",
             alignItems: "center",
-            justifyContent:
-              "center",
+            justifyContent: "center",
             padding: "20px",
             zIndex: 3000,
           }}
@@ -644,8 +631,7 @@ function EmployeeManagement() {
 
             <h2
               style={{
-                margin:
-                  "0 0 5px",
+                margin: "0 0 5px",
                 color: "#172033",
               }}
             >
@@ -654,21 +640,17 @@ function EmployeeManagement() {
 
             <p
               style={{
-                margin:
-                  "0 0 20px",
+                margin: "0 0 20px",
                 color: "#64748b",
                 fontSize: "13px",
               }}
             >
-              Update employee
-              information.
+              Update employee information.
             </p>
 
             {/* Name */}
 
-            <label
-              style={labelStyle}
-            >
+            <label style={labelStyle}>
               Employee Name
             </label>
 
@@ -686,45 +668,43 @@ function EmployeeManagement() {
             {/* Department */}
 
             <label style={labelStyle}>
-            Department
+              Department
             </label>
 
             <select
-            value={formData.department}
-            onChange={(e) =>
-            setFormData({
-            ...formData,
-            department: e.target.value,
-            })
-            }
-            style={inputStyle}
+              value={formData.department}
+              onChange={(e) =>
+                setFormData({
+                  ...formData,
+                  department:
+                    e.target.value,
+                })
+              }
+              style={inputStyle}
             >
-          {departments
-          .filter(
-          (department) => department !== "All"
-          )
-    .     map((department) => (
-          <option
-          key={department}
-          value={department}
-          >
-          {department}
-          </option>
-          ))}
-          </select>
+              {departments
+                .filter(
+                  (department) =>
+                    department !== "All"
+                )
+                .map((department) => (
+                  <option
+                    key={department}
+                    value={department}
+                  >
+                    {department}
+                  </option>
+                ))}
+            </select>
 
             {/* Designation */}
 
-            <label
-              style={labelStyle}
-            >
+            <label style={labelStyle}>
               Designation
             </label>
 
             <input
-              value={
-                formData.designation
-              }
+              value={formData.designation}
               onChange={(e) =>
                 setFormData({
                   ...formData,
@@ -737,16 +717,12 @@ function EmployeeManagement() {
 
             {/* Status */}
 
-            <label
-              style={labelStyle}
-            >
+            <label style={labelStyle}>
               Status
             </label>
 
             <select
-              value={
-                formData.status
-              }
+              value={formData.status}
               onChange={(e) =>
                 setFormData({
                   ...formData,
@@ -771,8 +747,7 @@ function EmployeeManagement() {
 
             <div
               style={{
-                display:
-                  "flex",
+                display: "flex",
                 gap: "10px",
                 marginTop: "25px",
               }}
@@ -780,9 +755,7 @@ function EmployeeManagement() {
               <button
                 type="button"
                 onClick={() =>
-                  setEditingEmployee(
-                    null
-                  )
+                  setEditingEmployee(null)
                 }
                 style={
                   cancelButtonStyle
@@ -793,9 +766,7 @@ function EmployeeManagement() {
 
               <button
                 type="button"
-                onClick={
-                  handleSave
-                }
+                onClick={handleSave}
                 style={
                   saveButtonStyle
                 }
@@ -812,7 +783,7 @@ function EmployeeManagement() {
 
 /* ================= STYLES ================= */
 
-const thStyle: React.CSSProperties = {
+const thStyle: CSSProperties = {
   textAlign: "left",
   padding: "14px 18px",
   color: "#475569",
@@ -822,7 +793,7 @@ const thStyle: React.CSSProperties = {
     "1px solid #e2e8f0",
 };
 
-const tdStyle: React.CSSProperties = {
+const tdStyle: CSSProperties = {
   padding: "15px 18px",
   color: "#334155",
   fontSize: "13px",
@@ -830,7 +801,7 @@ const tdStyle: React.CSSProperties = {
     "1px solid #e2e8f0",
 };
 
-const labelStyle: React.CSSProperties = {
+const labelStyle: CSSProperties = {
   display: "block",
   marginBottom: "7px",
   marginTop: "15px",
@@ -839,8 +810,9 @@ const labelStyle: React.CSSProperties = {
   fontWeight: 600,
 };
 
-const inputStyle: React.CSSProperties = {
+const inputStyle: CSSProperties = {
   width: "100%",
+  boxSizing: "border-box",
   padding: "11px 12px",
   border:
     "1px solid #cbd5e1",
@@ -849,7 +821,7 @@ const inputStyle: React.CSSProperties = {
   outline: "none",
 };
 
-const editButtonStyle: React.CSSProperties = {
+const editButtonStyle: CSSProperties = {
   border: "none",
   borderRadius: "7px",
   padding: "8px 13px",
@@ -860,7 +832,7 @@ const editButtonStyle: React.CSSProperties = {
   cursor: "pointer",
 };
 
-const deleteButtonStyle: React.CSSProperties = {
+const deleteButtonStyle: CSSProperties = {
   border: "none",
   borderRadius: "7px",
   padding: "8px 13px",
@@ -871,7 +843,7 @@ const deleteButtonStyle: React.CSSProperties = {
   cursor: "pointer",
 };
 
-const cancelButtonStyle: React.CSSProperties = {
+const cancelButtonStyle: CSSProperties = {
   flex: 1,
   padding: "11px",
   border:
@@ -883,7 +855,7 @@ const cancelButtonStyle: React.CSSProperties = {
   cursor: "pointer",
 };
 
-const saveButtonStyle: React.CSSProperties = {
+const saveButtonStyle: CSSProperties = {
   flex: 1,
   padding: "11px",
   border: "none",

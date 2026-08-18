@@ -1,4 +1,3 @@
-
 import { useEffect, useMemo, useState } from "react";
 import { useEmployeeContext } from "../../context/EmployeeContext";
 
@@ -18,7 +17,9 @@ const STORAGE_KEY = "onecloud_attendance";
 function AttendanceManagement() {
   const { employees } = useEmployeeContext();
 
-  const today = new Date().toISOString().split("T")[0];
+  const today = new Date()
+    .toISOString()
+    .split("T")[0];
 
   const [selectedDate, setSelectedDate] =
     useState(today);
@@ -31,17 +32,29 @@ function AttendanceManagement() {
   const [statusFilter, setStatusFilter] =
     useState("All");
 
+  // ================= ATTENDANCE STATE =================
+
   const [attendance, setAttendance] =
     useState<AttendanceRecord[]>(() => {
       const saved = localStorage.getItem(
         STORAGE_KEY
       );
 
-      if (saved) {
-        return JSON.parse(saved);
+      if (!saved) {
+        return [];
       }
 
-      return [];
+      try {
+        const parsed = JSON.parse(saved);
+
+        if (Array.isArray(parsed)) {
+          return parsed;
+        }
+
+        return [];
+      } catch {
+        return [];
+      }
     });
 
   // ================= SAVE TO LOCAL STORAGE =================
@@ -76,7 +89,11 @@ function AttendanceManagement() {
         checkOut: "-",
       };
     });
-  }, [employees, attendance, selectedDate]);
+  }, [
+    employees,
+    attendance,
+    selectedDate,
+  ]);
 
   // ================= DEPARTMENTS =================
 
@@ -120,7 +137,8 @@ function AttendanceManagement() {
 
       const matchesDepartment =
         departmentFilter === "All" ||
-        employee.department === departmentFilter;
+        employee.department ===
+          departmentFilter;
 
       const matchesStatus =
         statusFilter === "All" ||
@@ -147,11 +165,12 @@ function AttendanceManagement() {
     status: AttendanceStatus
   ) => {
     setAttendance((current) => {
-      const existingIndex = current.findIndex(
-        (record) =>
-          record.employeeId === employeeId &&
-          record.date === selectedDate
-      );
+      const existingIndex =
+        current.findIndex(
+          (record) =>
+            record.employeeId === employeeId &&
+            record.date === selectedDate
+        );
 
       if (existingIndex !== -1) {
         const updated = [...current];
@@ -193,11 +212,12 @@ function AttendanceManagement() {
     const currentTime = getCurrentTime();
 
     setAttendance((current) => {
-      const existingIndex = current.findIndex(
-        (record) =>
-          record.employeeId === employeeId &&
-          record.date === selectedDate
-      );
+      const existingIndex =
+        current.findIndex(
+          (record) =>
+            record.employeeId === employeeId &&
+            record.date === selectedDate
+        );
 
       if (existingIndex !== -1) {
         const updated = [...current];
@@ -231,11 +251,12 @@ function AttendanceManagement() {
     const currentTime = getCurrentTime();
 
     setAttendance((current) => {
-      const existingIndex = current.findIndex(
-        (record) =>
-          record.employeeId === employeeId &&
-          record.date === selectedDate
-      );
+      const existingIndex =
+        current.findIndex(
+          (record) =>
+            record.employeeId === employeeId &&
+            record.date === selectedDate
+        );
 
       if (existingIndex === -1) {
         return current;
@@ -256,23 +277,30 @@ function AttendanceManagement() {
 
   const totalEmployees = employees.length;
 
-  const presentCount = recordsForDate.filter(
-    (record) => record.status === "Present"
-  ).length;
+  const presentCount =
+    recordsForDate.filter(
+      (record) =>
+        record.status === "Present"
+    ).length;
 
-  const absentCount = recordsForDate.filter(
-    (record) => record.status === "Absent"
-  ).length;
+  const absentCount =
+    recordsForDate.filter(
+      (record) =>
+        record.status === "Absent"
+    ).length;
 
-  const leaveCount = recordsForDate.filter(
-    (record) => record.status === "Leave"
-  ).length;
+  const leaveCount =
+    recordsForDate.filter(
+      (record) =>
+        record.status === "Leave"
+    ).length;
 
-  const notMarkedCount = recordsForDate.filter(
-    (record) =>
-      record.checkIn === "-" &&
-      record.status === "Absent"
-  ).length;
+  const notMarkedCount =
+    recordsForDate.filter(
+      (record) =>
+        record.checkIn === "-" &&
+        record.status === "Absent"
+    ).length;
 
   // ================= RESET FILTERS =================
 
@@ -453,14 +481,16 @@ function AttendanceManagement() {
                   All Departments
                 </option>
 
-                {departments.map((department) => (
-                  <option
-                    key={department}
-                    value={department}
-                  >
-                    {department}
-                  </option>
-                ))}
+                {departments.map(
+                  (department) => (
+                    <option
+                      key={department}
+                      value={department}
+                    >
+                      {department}
+                    </option>
+                  )
+                )}
               </select>
             </div>
 
@@ -506,7 +536,8 @@ function AttendanceManagement() {
               style={{
                 height: "40px",
                 padding: "0 15px",
-                border: "1px solid #cbd5e1",
+                border:
+                  "1px solid #cbd5e1",
                 borderRadius: "8px",
                 background: "#ffffff",
                 color: "#475569",
@@ -536,7 +567,8 @@ function AttendanceManagement() {
           <div
             style={{
               display: "flex",
-              justifyContent: "space-between",
+              justifyContent:
+                "space-between",
               alignItems: "center",
               marginBottom: "18px",
             }}
@@ -581,7 +613,8 @@ function AttendanceManagement() {
             <table
               style={{
                 width: "100%",
-                borderCollapse: "collapse",
+                borderCollapse:
+                  "collapse",
                 minWidth: "1050px",
               }}
             >
@@ -592,7 +625,9 @@ function AttendanceManagement() {
                     textAlign: "left",
                   }}
                 >
-                  <th style={thStyle}>ID</th>
+                  <th style={thStyle}>
+                    ID
+                  </th>
 
                   <th style={thStyle}>
                     Employee
@@ -621,273 +656,305 @@ function AttendanceManagement() {
               </thead>
 
               <tbody>
-                {filteredRecords.map((record) => {
-                  const employee =
-                    employees.find(
-                      (item) =>
-                        item.id ===
-                        record.employeeId
-                    );
+                {filteredRecords.map(
+                  (record) => {
+                    const employee =
+                      employees.find(
+                        (item) =>
+                          item.id ===
+                          record.employeeId
+                      );
 
-                  if (!employee) {
-                    return null;
-                  }
+                    if (!employee) {
+                      return null;
+                    }
 
-                  return (
-                    <tr key={record.employeeId}>
-                      {/* ID */}
+                    return (
+                      <tr
+                        key={
+                          record.employeeId
+                        }
+                      >
+                        {/* ID */}
 
-                      <td style={tdStyle}>
-                        {employee.id}
-                      </td>
+                        <td style={tdStyle}>
+                          {employee.id}
+                        </td>
 
-                      {/* EMPLOYEE */}
+                        {/* EMPLOYEE */}
 
-                      <td style={tdStyle}>
-                        <strong
-                          style={{
-                            color: "#172033",
-                          }}
-                        >
-                          {employee.name}
-                        </strong>
+                        <td style={tdStyle}>
+                          <strong
+                            style={{
+                              color:
+                                "#172033",
+                            }}
+                          >
+                            {employee.name}
+                          </strong>
 
-                        <div
-                          style={{
-                            color: "#94a3b8",
-                            fontSize: "11px",
-                            marginTop: "3px",
-                          }}
-                        >
-                          {employee.designation}
-                        </div>
-                      </td>
+                          <div
+                            style={{
+                              color:
+                                "#94a3b8",
+                              fontSize:
+                                "11px",
+                              marginTop:
+                                "3px",
+                            }}
+                          >
+                            {
+                              employee.designation
+                            }
+                          </div>
+                        </td>
 
-                      {/* DEPARTMENT */}
+                        {/* DEPARTMENT */}
 
-                      <td style={tdStyle}>
-                        {employee.department}
-                      </td>
-
-                      {/* STATUS */}
-
-                      <td style={tdStyle}>
-                        <select
-                          value={record.status}
-                          onChange={(event) =>
-                            updateStatus(
-                              employee.id,
-                              event.target
-                                .value as AttendanceStatus
-                            )
+                        <td style={tdStyle}>
+                          {
+                            employee.department
                           }
-                          style={{
-                            border:
-                              "1px solid #cbd5e1",
-                            borderRadius: "7px",
-                            padding:
-                              "6px 8px",
-                            fontSize: "12px",
-                            color: "#334155",
-                            background:
-                              "#ffffff",
-                            cursor:
-                              "pointer",
-                          }}
-                        >
-                          <option value="Present">
-                            Present
-                          </option>
+                        </td>
 
-                          <option value="Absent">
-                            Absent
-                          </option>
+                        {/* STATUS */}
 
-                          <option value="Leave">
-                            Leave
-                          </option>
-                        </select>
-                      </td>
-
-                      {/* CHECK IN */}
-
-                      <td style={tdStyle}>
-                        {record.checkIn !== "-" ? (
-                          <span
-                            style={{
-                              display:
-                                "inline-block",
-                              padding:
-                                "6px 10px",
-                              borderRadius:
-                                "7px",
-                              background:
-                                "#ecfdf5",
-                              color:
-                                "#059669",
-                              fontSize:
-                                "12px",
-                              fontWeight:
-                                600,
-                            }}
-                          >
-                            {record.checkIn}
-                          </span>
-                        ) : (
-                          <span
-                            style={{
-                              color: "#94a3b8",
-                            }}
-                          >
-                            Not checked in
-                          </span>
-                        )}
-                      </td>
-
-                      {/* CHECK OUT */}
-
-                      <td style={tdStyle}>
-                        {record.checkOut !== "-" ? (
-                          <span
-                            style={{
-                              display:
-                                "inline-block",
-                              padding:
-                                "6px 10px",
-                              borderRadius:
-                                "7px",
-                              background:
-                                "#eff6ff",
-                              color:
-                                "#1769ff",
-                              fontSize:
-                                "12px",
-                              fontWeight:
-                                600,
-                            }}
-                          >
-                            {record.checkOut}
-                          </span>
-                        ) : (
-                          <span
-                            style={{
-                              color: "#94a3b8",
-                            }}
-                          >
-                            Not checked out
-                          </span>
-                        )}
-                      </td>
-
-                      {/* ACTION */}
-
-                      <td style={tdStyle}>
-                        <div
-                          style={{
-                            display: "flex",
-                            gap: "8px",
-                            alignItems:
-                              "center",
-                            flexWrap:
-                              "wrap",
-                          }}
-                        >
-                          {/* CHECK IN BUTTON */}
-
-                          <button
-                            type="button"
-                            onClick={() =>
-                              handleCheckIn(
-                                employee.id
+                        <td style={tdStyle}>
+                          <select
+                            value={
+                              record.status
+                            }
+                            onChange={(
+                              event
+                            ) =>
+                              updateStatus(
+                                employee.id,
+                                event.target
+                                  .value as AttendanceStatus
                               )
                             }
-                            disabled={
-                              record.checkIn !==
+                            style={{
+                              border:
+                                "1px solid #cbd5e1",
+                              borderRadius:
+                                "7px",
+                              padding:
+                                "6px 8px",
+                              fontSize:
+                                "12px",
+                              color:
+                                "#334155",
+                              background:
+                                "#ffffff",
+                              cursor:
+                                "pointer",
+                            }}
+                          >
+                            <option value="Present">
+                              Present
+                            </option>
+
+                            <option value="Absent">
+                              Absent
+                            </option>
+
+                            <option value="Leave">
+                              Leave
+                            </option>
+                          </select>
+                        </td>
+
+                        {/* CHECK IN */}
+
+                        <td style={tdStyle}>
+                          {record.checkIn !==
+                          "-" ? (
+                            <span
+                              style={{
+                                display:
+                                  "inline-block",
+                                padding:
+                                  "6px 10px",
+                                borderRadius:
+                                  "7px",
+                                background:
+                                  "#ecfdf5",
+                                color:
+                                  "#059669",
+                                fontSize:
+                                  "12px",
+                                fontWeight:
+                                  600,
+                              }}
+                            >
+                              {
+                                record.checkIn
+                              }
+                            </span>
+                          ) : (
+                            <span
+                              style={{
+                                color:
+                                  "#94a3b8",
+                              }}
+                            >
+                              Not checked in
+                            </span>
+                          )}
+                        </td>
+
+                        {/* CHECK OUT */}
+
+                        <td style={tdStyle}>
+                          {record.checkOut !==
+                          "-" ? (
+                            <span
+                              style={{
+                                display:
+                                  "inline-block",
+                                padding:
+                                  "6px 10px",
+                                borderRadius:
+                                  "7px",
+                                background:
+                                  "#eff6ff",
+                                color:
+                                  "#1769ff",
+                                fontSize:
+                                  "12px",
+                                fontWeight:
+                                  600,
+                              }}
+                            >
+                              {
+                                record.checkOut
+                              }
+                            </span>
+                          ) : (
+                            <span
+                              style={{
+                                color:
+                                  "#94a3b8",
+                              }}
+                            >
+                              Not checked out
+                            </span>
+                          )}
+                        </td>
+
+                        {/* ACTION */}
+
+                        <td style={tdStyle}>
+                          <div
+                            style={{
+                              display:
+                                "flex",
+                              gap: "8px",
+                              alignItems:
+                                "center",
+                              flexWrap:
+                                "wrap",
+                            }}
+                          >
+                            {/* CHECK IN */}
+
+                            <button
+                              type="button"
+                              onClick={() =>
+                                handleCheckIn(
+                                  employee.id
+                                )
+                              }
+                              disabled={
+                                record.checkIn !==
+                                "-"
+                              }
+                              style={{
+                                border:
+                                  "none",
+                                borderRadius:
+                                  "7px",
+                                padding:
+                                  "8px 12px",
+                                background:
+                                  record.checkIn !==
+                                  "-"
+                                    ? "#cbd5e1"
+                                    : "#059669",
+                                color:
+                                  "#ffffff",
+                                fontSize:
+                                  "11px",
+                                fontWeight:
+                                  600,
+                                cursor:
+                                  record.checkIn !==
+                                  "-"
+                                    ? "not-allowed"
+                                    : "pointer",
+                              }}
+                            >
+                              {record.checkIn !==
                               "-"
-                            }
-                            style={{
-                              border: "none",
-                              borderRadius:
-                                "7px",
-                              padding:
-                                "8px 12px",
-                              background:
-                                record.checkIn !==
-                                "-"
-                                  ? "#cbd5e1"
-                                  : "#059669",
-                              color:
-                                "#ffffff",
-                              fontSize:
-                                "11px",
-                              fontWeight:
-                                600,
-                              cursor:
-                                record.checkIn !==
-                                "-"
-                                  ? "not-allowed"
-                                  : "pointer",
-                            }}
-                          >
-                            {record.checkIn !==
-                            "-"
-                              ? "Checked In"
-                              : "Check In"}
-                          </button>
+                                ? "Checked In"
+                                : "Check In"}
+                            </button>
 
-                          {/* CHECK OUT BUTTON */}
+                            {/* CHECK OUT */}
 
-                          <button
-                            type="button"
-                            onClick={() =>
-                              handleCheckOut(
-                                employee.id
-                              )
-                            }
-                            disabled={
-                              record.checkIn ===
-                                "-" ||
-                              record.checkOut !==
-                                "-"
-                            }
-                            style={{
-                              border: "none",
-                              borderRadius:
-                                "7px",
-                              padding:
-                                "8px 12px",
-                              background:
+                            <button
+                              type="button"
+                              onClick={() =>
+                                handleCheckOut(
+                                  employee.id
+                                )
+                              }
+                              disabled={
                                 record.checkIn ===
                                   "-" ||
                                 record.checkOut !==
                                   "-"
-                                  ? "#cbd5e1"
-                                  : "#1769ff",
-                              color:
-                                "#ffffff",
-                              fontSize:
-                                "11px",
-                              fontWeight:
-                                600,
-                              cursor:
-                                record.checkIn ===
-                                  "-" ||
-                                record.checkOut !==
-                                  "-"
-                                  ? "not-allowed"
-                                  : "pointer",
-                            }}
-                          >
-                            {record.checkOut !==
-                            "-"
-                              ? "Checked Out"
-                              : "Check Out"}
-                          </button>
-                        </div>
-                      </td>
-                    </tr>
-                  );
-                })}
+                              }
+                              style={{
+                                border:
+                                  "none",
+                                borderRadius:
+                                  "7px",
+                                padding:
+                                  "8px 12px",
+                                background:
+                                  record.checkIn ===
+                                    "-" ||
+                                  record.checkOut !==
+                                    "-"
+                                    ? "#cbd5e1"
+                                    : "#1769ff",
+                                color:
+                                  "#ffffff",
+                                fontSize:
+                                  "11px",
+                                fontWeight:
+                                  600,
+                                cursor:
+                                  record.checkIn ===
+                                    "-" ||
+                                  record.checkOut !==
+                                    "-"
+                                    ? "not-allowed"
+                                    : "pointer",
+                              }}
+                            >
+                              {record.checkOut !==
+                              "-"
+                                ? "Checked Out"
+                                : "Check Out"}
+                            </button>
+                          </div>
+                        </td>
+                      </tr>
+                    );
+                  }
+                )}
               </tbody>
             </table>
           ) : (
@@ -910,7 +977,8 @@ function AttendanceManagement() {
             marginTop: "18px",
             padding: "14px 18px",
             background: "#eff6ff",
-            border: "1px solid #dbeafe",
+            border:
+              "1px solid #dbeafe",
             borderRadius: "10px",
             color: "#475569",
             fontSize: "12px",
@@ -926,6 +994,32 @@ function AttendanceManagement() {
           Check In and Check Out automatically
           capture the current system time.
         </div>
+
+        {/* ================= NOT MARKED INFO ================= */}
+
+        {notMarkedCount > 0 && (
+          <div
+            style={{
+              marginTop: "12px",
+              padding: "12px 18px",
+              background: "#fff7ed",
+              border:
+                "1px solid #fed7aa",
+              borderRadius: "10px",
+              color: "#9a3412",
+              fontSize: "12px",
+            }}
+          >
+            <strong>
+              Attendance reminder:
+            </strong>{" "}
+            {notMarkedCount} employee
+            {notMarkedCount !== 1
+              ? "s are"
+              : " is"}{" "}
+            not marked yet for this date.
+          </div>
+        )}
       </div>
     </div>
   );
@@ -1018,7 +1112,8 @@ const inputStyle = {
 
 const thStyle = {
   padding: "13px 10px",
-  borderBottom: "1px solid #e2e8f0",
+  borderBottom:
+    "1px solid #e2e8f0",
   color: "#475569",
   fontSize: "12px",
   fontWeight: 700,
@@ -1026,10 +1121,12 @@ const thStyle = {
 
 const tdStyle = {
   padding: "14px 10px",
-  borderBottom: "1px solid #e2e8f0",
+  borderBottom:
+    "1px solid #e2e8f0",
   color: "#475569",
   fontSize: "12px",
-  verticalAlign: "middle" as const,
+  verticalAlign:
+    "middle" as const,
 };
 
 export default AttendanceManagement;

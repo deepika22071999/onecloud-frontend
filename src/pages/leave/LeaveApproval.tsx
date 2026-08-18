@@ -13,54 +13,76 @@ type LeaveRequest = {
   status: LeaveStatus;
 };
 
+const STORAGE_KEY = "leaveRequests";
+
 function LeaveApproval() {
   const { employees } = useEmployeeContext();
 
-  const [requests, setRequests] = useState<LeaveRequest[]>(
-    () => {
-      const saved = localStorage.getItem("leaveRequests");
-      return saved ? JSON.parse(saved) : [];
-    }
-  );
+  const [requests, setRequests] = useState<LeaveRequest[]>(() => {
+    const saved = localStorage.getItem(STORAGE_KEY);
 
-  const [filter, setFilter] = useState<
-    "All" | LeaveStatus
-  >("All");
+    if (!saved) {
+      return [];
+    }
+
+    try {
+      const parsed = JSON.parse(saved);
+
+      return Array.isArray(parsed) ? parsed : [];
+    } catch {
+      return [];
+    }
+  });
+
+  const [statusFilter, setStatusFilter] = useState("All");
+
+  // ================= SAVE REQUESTS =================
 
   useEffect(() => {
     localStorage.setItem(
-      "leaveRequests",
+      STORAGE_KEY,
       JSON.stringify(requests)
     );
   }, [requests]);
 
+  // ================= UPDATE STATUS =================
+
   const updateStatus = (
     id: number,
-    status: "Approved" | "Rejected"
+    status: LeaveStatus
   ) => {
     setRequests((current) =>
       current.map((request) =>
         request.id === id
-          ? { ...request, status }
+          ? {
+              ...request,
+              status,
+            }
           : request
       )
     );
   };
 
+  // ================= EMPLOYEE NAME =================
+
   const getEmployeeName = (employeeId: number) => {
     return (
       employees.find(
         (employee) => employee.id === employeeId
-      )?.name || "Employee"
+      )?.name || "Unknown Employee"
     );
   };
 
-  const filteredRequests =
-    filter === "All"
-      ? requests
-      : requests.filter(
-          (request) => request.status === filter
-        );
+  // ================= FILTER =================
+
+  const filteredRequests = requests.filter((request) => {
+    return (
+      statusFilter === "All" ||
+      request.status === statusFilter
+    );
+  });
+
+  // ================= COUNTS =================
 
   const pendingCount = requests.filter(
     (request) => request.status === "Pending"
@@ -83,228 +105,314 @@ function LeaveApproval() {
         fontFamily: "Arial, Helvetica, sans-serif",
       }}
     >
-      {/* HEADER */}
-
-      <div
-        style={{
-          maxWidth: "1200px",
-          margin: "0 auto 30px",
-        }}
-      >
-        <p
-          style={{
-            margin: "0 0 7px",
-            color: "#1769ff",
-            fontSize: "14px",
-            fontWeight: 600,
-          }}
-        >
-          HRMS • HR PANEL
-        </p>
-
-        <h1
-          style={{
-            margin: 0,
-            color: "#172033",
-            fontSize: "32px",
-          }}
-        >
-          Leave Approval
-        </h1>
-
-        <p
-          style={{
-            margin: "8px 0 0",
-            color: "#64748b",
-            fontSize: "14px",
-          }}
-        >
-          Review employee leave requests and manage approvals.
-        </p>
-      </div>
-
-      {/* SUMMARY */}
-
-      <div
-        style={{
-          maxWidth: "1200px",
-          margin: "0 auto 30px",
-          display: "grid",
-          gridTemplateColumns:
-            "repeat(auto-fit, minmax(210px, 1fr))",
-          gap: "18px",
-        }}
-      >
-        <SummaryCard
-          title="Pending Requests"
-          value={pendingCount}
-          icon="🕒"
-        />
-
-        <SummaryCard
-          title="Approved"
-          value={approvedCount}
-          icon="✓"
-        />
-
-        <SummaryCard
-          title="Rejected"
-          value={rejectedCount}
-          icon="✕"
-        />
-      </div>
-
-      {/* FILTER */}
-
-      <div
-        style={{
-          maxWidth: "1200px",
-          margin: "0 auto 20px",
-          display: "flex",
-          justifyContent: "space-between",
-          alignItems: "center",
-          gap: "15px",
-        }}
-      >
-        <h2
-          style={{
-            margin: 0,
-            color: "#172033",
-            fontSize: "21px",
-          }}
-        >
-          Employee Leave Requests
-        </h2>
-
-        <select
-          value={filter}
-          onChange={(event) =>
-            setFilter(
-              event.target.value as
-                | "All"
-                | LeaveStatus
-            )
-          }
-          style={{
-            padding: "10px 14px",
-            border: "1px solid #cbd5e1",
-            borderRadius: "8px",
-            background: "#ffffff",
-            color: "#334155",
-            fontSize: "13px",
-            outline: "none",
-          }}
-        >
-          <option value="All">
-            All Requests
-          </option>
-
-          <option value="Pending">
-            Pending
-          </option>
-
-          <option value="Approved">
-            Approved
-          </option>
-
-          <option value="Rejected">
-            Rejected
-          </option>
-        </select>
-      </div>
-
-      {/* TABLE */}
-
       <div
         style={{
           maxWidth: "1200px",
           margin: "0 auto",
-          background: "#ffffff",
-          border: "1px solid #e2e8f0",
-          borderRadius: "14px",
-          padding: "25px",
-          boxShadow:
-            "0 5px 18px rgba(15, 23, 42, 0.06)",
         }}
       >
-        {filteredRequests.length > 0 ? (
-          <div style={{ overflowX: "auto" }}>
+        {/* ================= HEADER ================= */}
+
+        <div
+          style={{
+            marginBottom: "28px",
+          }}
+        >
+          <p
+            style={{
+              margin: "0 0 7px",
+              color: "#1769ff",
+              fontSize: "13px",
+              fontWeight: 700,
+            }}
+          >
+            HRMS • LEAVE APPROVAL
+          </p>
+
+          <h1
+            style={{
+              margin: "0 0 7px",
+              color: "#172033",
+              fontSize: "30px",
+            }}
+          >
+            Leave Approval
+          </h1>
+
+          <p
+            style={{
+              margin: 0,
+              color: "#64748b",
+              fontSize: "14px",
+            }}
+          >
+            Review employee leave requests and
+            approve or reject them.
+          </p>
+        </div>
+
+        {/* ================= SUMMARY ================= */}
+
+        <div
+          style={{
+            display: "grid",
+            gridTemplateColumns:
+              "repeat(auto-fit, minmax(210px, 1fr))",
+            gap: "18px",
+            marginBottom: "25px",
+          }}
+        >
+          <SummaryCard
+            title="Total Requests"
+            value={requests.length}
+            icon="📋"
+          />
+
+          <SummaryCard
+            title="Pending"
+            value={pendingCount}
+            icon="⏳"
+          />
+
+          <SummaryCard
+            title="Approved"
+            value={approvedCount}
+            icon="✓"
+          />
+
+          <SummaryCard
+            title="Rejected"
+            value={rejectedCount}
+            icon="✕"
+          />
+        </div>
+
+        {/* ================= FILTER ================= */}
+
+        <div
+          style={{
+            background: "#ffffff",
+            border: "1px solid #e2e8f0",
+            borderRadius: "14px",
+            padding: "20px",
+            marginBottom: "22px",
+            boxShadow:
+              "0 5px 18px rgba(15,23,42,0.05)",
+          }}
+        >
+          <label
+            style={{
+              display: "block",
+              marginBottom: "7px",
+              color: "#334155",
+              fontSize: "12px",
+              fontWeight: 600,
+            }}
+          >
+            Filter by Status
+          </label>
+
+          <select
+            value={statusFilter}
+            onChange={(event) =>
+              setStatusFilter(event.target.value)
+            }
+            style={{
+              height: "40px",
+              padding: "8px 12px",
+              border: "1px solid #cbd5e1",
+              borderRadius: "8px",
+              background: "#ffffff",
+              color: "#334155",
+              fontSize: "13px",
+              minWidth: "200px",
+            }}
+          >
+            <option value="All">
+              All Requests
+            </option>
+
+            <option value="Pending">
+              Pending
+            </option>
+
+            <option value="Approved">
+              Approved
+            </option>
+
+            <option value="Rejected">
+              Rejected
+            </option>
+          </select>
+        </div>
+
+        {/* ================= REQUEST TABLE ================= */}
+
+        <div
+          style={{
+            background: "#ffffff",
+            border: "1px solid #e2e8f0",
+            borderRadius: "14px",
+            padding: "20px",
+            overflowX: "auto",
+            boxShadow:
+              "0 5px 18px rgba(15,23,42,0.05)",
+          }}
+        >
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "space-between",
+              alignItems: "center",
+              marginBottom: "18px",
+            }}
+          >
+            <div>
+              <h2
+                style={{
+                  margin: "0 0 5px",
+                  color: "#172033",
+                  fontSize: "20px",
+                }}
+              >
+                Employee Leave Requests
+              </h2>
+
+              <p
+                style={{
+                  margin: 0,
+                  color: "#64748b",
+                  fontSize: "13px",
+                }}
+              >
+                Review and manage submitted leave
+                requests.
+              </p>
+            </div>
+
+            <span
+              style={{
+                padding: "7px 12px",
+                borderRadius: "20px",
+                background: "#eff6ff",
+                color: "#1769ff",
+                fontSize: "12px",
+                fontWeight: 600,
+              }}
+            >
+              {filteredRequests.length} Requests
+            </span>
+          </div>
+
+          {filteredRequests.length > 0 ? (
             <table
               style={{
                 width: "100%",
                 borderCollapse: "collapse",
-                minWidth: "950px",
+                minWidth: "1050px",
               }}
             >
               <thead>
-                <tr>
-                  {[
-                    "Request ID",
-                    "Employee",
-                    "Leave Type",
-                    "From Date",
-                    "To Date",
-                    "Reason",
-                    "Status",
-                    "Action",
-                  ].map((heading) => (
-                    <th
-                      key={heading}
-                      style={headerStyle}
-                    >
-                      {heading}
-                    </th>
-                  ))}
+                <tr
+                  style={{
+                    background: "#f8fafc",
+                    textAlign: "left",
+                  }}
+                >
+                  <th style={thStyle}>
+                    Employee
+                  </th>
+
+                  <th style={thStyle}>
+                    Leave Type
+                  </th>
+
+                  <th style={thStyle}>
+                    From
+                  </th>
+
+                  <th style={thStyle}>
+                    To
+                  </th>
+
+                  <th style={thStyle}>
+                    Reason
+                  </th>
+
+                  <th style={thStyle}>
+                    Status
+                  </th>
+
+                  <th style={thStyle}>
+                    Action
+                  </th>
                 </tr>
               </thead>
 
               <tbody>
                 {filteredRequests.map((request) => (
                   <tr key={request.id}>
-                    <td style={cellStyle}>
-                      {request.id}
+                    {/* EMPLOYEE */}
+
+                    <td style={tdStyle}>
+                      <strong
+                        style={{
+                          color: "#172033",
+                        }}
+                      >
+                        {getEmployeeName(
+                          request.employeeId
+                        )}
+                      </strong>
                     </td>
 
-                    <td
-                      style={{
-                        ...cellStyle,
-                        fontWeight: 600,
-                        color: "#172033",
-                      }}
-                    >
-                      {getEmployeeName(
-                        request.employeeId
-                      )}
-                    </td>
+                    {/* LEAVE TYPE */}
 
-                    <td style={cellStyle}>
+                    <td style={tdStyle}>
                       {request.leaveType}
                     </td>
 
-                    <td style={cellStyle}>
+                    {/* FROM */}
+
+                    <td style={tdStyle}>
                       {request.fromDate}
                     </td>
 
-                    <td style={cellStyle}>
+                    {/* TO */}
+
+                    <td style={tdStyle}>
                       {request.toDate}
                     </td>
 
-                    <td style={cellStyle}>
+                    {/* REASON */}
+
+                    <td
+                      style={{
+                        ...tdStyle,
+                        maxWidth: "220px",
+                      }}
+                    >
                       {request.reason}
                     </td>
 
-                    <td style={cellStyle}>
+                    {/* STATUS */}
+
+                    <td style={tdStyle}>
                       <StatusBadge
                         status={request.status}
                       />
                     </td>
 
-                    <td style={cellStyle}>
-                      {request.status === "Pending" ? (
+                    {/* ACTION */}
+
+                    <td style={tdStyle}>
+                      {request.status ===
+                      "Pending" ? (
                         <div
                           style={{
                             display: "flex",
-                            gap: "7px",
+                            gap: "8px",
+                            flexWrap: "wrap",
                           }}
                         >
                           <button
@@ -316,8 +424,16 @@ function LeaveApproval() {
                               )
                             }
                             style={{
-                              ...actionButton,
-                              background: "#059669",
+                              border: "none",
+                              borderRadius: "7px",
+                              padding:
+                                "8px 12px",
+                              background:
+                                "#059669",
+                              color: "#ffffff",
+                              fontSize: "11px",
+                              fontWeight: 600,
+                              cursor: "pointer",
                             }}
                           >
                             Approve
@@ -332,8 +448,16 @@ function LeaveApproval() {
                               )
                             }
                             style={{
-                              ...actionButton,
-                              background: "#dc2626",
+                              border: "none",
+                              borderRadius: "7px",
+                              padding:
+                                "8px 12px",
+                              background:
+                                "#dc2626",
+                              color: "#ffffff",
+                              fontSize: "11px",
+                              fontWeight: 600,
+                              cursor: "pointer",
                             }}
                           >
                             Reject
@@ -346,7 +470,7 @@ function LeaveApproval() {
                             fontSize: "12px",
                           }}
                         >
-                          Completed
+                          Action completed
                         </span>
                       )}
                     </td>
@@ -354,47 +478,50 @@ function LeaveApproval() {
                 ))}
               </tbody>
             </table>
-          </div>
-        ) : (
-          <div
-            style={{
-              padding: "50px 20px",
-              textAlign: "center",
-            }}
-          >
+          ) : (
             <div
               style={{
-                fontSize: "38px",
-                marginBottom: "12px",
-              }}
-            >
-              📋
-            </div>
-
-            <h3
-              style={{
-                margin: "0 0 7px",
-                color: "#334155",
-              }}
-            >
-              No Leave Requests
-            </h3>
-
-            <p
-              style={{
-                margin: 0,
+                padding: "50px 20px",
+                textAlign: "center",
                 color: "#64748b",
-                fontSize: "13px",
+                background: "#f8fafc",
+                borderRadius: "10px",
               }}
             >
-              No leave requests match the selected filter.
-            </p>
-          </div>
-        )}
+              No leave requests found.
+            </div>
+          )}
+        </div>
+
+        {/* ================= INFO ================= */}
+
+        <div
+          style={{
+            marginTop: "18px",
+            padding: "14px 18px",
+            background: "#eff6ff",
+            border: "1px solid #dbeafe",
+            borderRadius: "10px",
+            color: "#475569",
+            fontSize: "12px",
+          }}
+        >
+          <strong
+            style={{
+              color: "#1769ff",
+            }}
+          >
+            Approval rule:
+          </strong>{" "}
+          Pending leave requests can be approved or
+          rejected by HR.
+        </div>
       </div>
     </div>
   );
 }
+
+// ================= SUMMARY CARD =================
 
 function SummaryCard({
   title,
@@ -410,10 +537,10 @@ function SummaryCard({
       style={{
         background: "#ffffff",
         border: "1px solid #e2e8f0",
-        borderRadius: "14px",
+        borderRadius: "12px",
         padding: "20px",
         boxShadow:
-          "0 5px 18px rgba(15, 23, 42, 0.06)",
+          "0 5px 18px rgba(15,23,42,0.05)",
       }}
     >
       <div
@@ -423,51 +550,43 @@ function SummaryCard({
           alignItems: "center",
         }}
       >
-        <span
-          style={{
-            width: "45px",
-            height: "45px",
-            borderRadius: "12px",
-            background: "#eff6ff",
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            fontSize: "22px",
-          }}
-        >
+        <span style={{ fontSize: "23px" }}>
           {icon}
         </span>
 
         <strong
           style={{
             color: "#1769ff",
-            fontSize: "26px",
+            fontSize: "25px",
           }}
         >
           {value}
         </strong>
       </div>
 
-      <h3
+      <p
         style={{
-          margin: "15px 0 0",
-          color: "#334155",
-          fontSize: "15px",
+          margin: "12px 0 0",
+          color: "#475569",
+          fontSize: "14px",
+          fontWeight: 600,
         }}
       >
         {title}
-      </h3>
+      </p>
     </div>
   );
 }
+
+// ================= STATUS BADGE =================
 
 function StatusBadge({
   status,
 }: {
   status: LeaveStatus;
 }) {
-  const isApproved = status === "Approved";
-  const isRejected = status === "Rejected";
+  const approved = status === "Approved";
+  const rejected = status === "Rejected";
 
   return (
     <span
@@ -475,14 +594,14 @@ function StatusBadge({
         display: "inline-block",
         padding: "6px 11px",
         borderRadius: "20px",
-        background: isApproved
+        background: approved
           ? "#ecfdf5"
-          : isRejected
+          : rejected
           ? "#fef2f2"
           : "#fff7ed",
-        color: isApproved
+        color: approved
           ? "#059669"
-          : isRejected
+          : rejected
           ? "#dc2626"
           : "#c2410c",
         fontSize: "12px",
@@ -494,30 +613,22 @@ function StatusBadge({
   );
 }
 
-const headerStyle = {
-  padding: "13px",
-  textAlign: "left" as const,
-  background: "#f8fafc",
-  color: "#475569",
-  fontSize: "13px",
-  borderBottom: "1px solid #e2e8f0",
-};
+// ================= TABLE STYLES =================
 
-const cellStyle = {
-  padding: "14px 13px",
+const thStyle = {
+  padding: "13px 10px",
   borderBottom: "1px solid #e2e8f0",
   color: "#475569",
-  fontSize: "13px",
+  fontSize: "12px",
+  fontWeight: 700,
 };
 
-const actionButton = {
-  border: "none",
-  borderRadius: "6px",
-  padding: "7px 10px",
-  color: "#ffffff",
-  fontSize: "11px",
-  fontWeight: 600,
-  cursor: "pointer",
+const tdStyle = {
+  padding: "14px 10px",
+  borderBottom: "1px solid #e2e8f0",
+  color: "#475569",
+  fontSize: "12px",
+  verticalAlign: "middle" as const,
 };
 
 export default LeaveApproval;

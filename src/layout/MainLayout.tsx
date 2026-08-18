@@ -1,3 +1,4 @@
+import logo from "../assets/company logo.jpeg";
 import { NavLink, Outlet } from "react-router-dom";
 import "./MainLayout.css";
 
@@ -10,9 +11,18 @@ function MainLayout() {
       <header className="main-navbar">
 
         <div className="navbar-brand">
-          <h2>OneCloud</h2>
-          <span>Employee Management System</span>
-        </div>
+        <img
+        src={logo}
+        alt="One Enterprise Logo"
+        style={{
+        width: "150px",
+        height: "auto",
+        objectFit: "contain",
+        }}
+      />
+
+  <span>Employee Management System</span>
+</div>
 
         <nav className="navbar-menu">
 
@@ -80,6 +90,39 @@ function MainLayout() {
             }
           >
             Leave
+          </NavLink>
+
+          <NavLink
+            to="/leave/approval"
+            className={({ isActive }) =>
+              isActive
+                ? "nav-link active"
+                : "nav-link"
+            }
+          >
+            Leave Approval
+          </NavLink>
+
+          <NavLink
+            to="/hr-dashboard"
+            className={({ isActive }) =>
+              isActive
+                ? "nav-link active"
+                : "nav-link"
+            }
+          >
+            HR Dashboard
+          </NavLink>
+
+          <NavLink
+            to="/reports"
+            className={({ isActive }) =>
+              isActive
+                ? "nav-link active"
+                : "nav-link"
+            }
+          >
+            Reports
           </NavLink>
 
         </nav>
